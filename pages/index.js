@@ -83,6 +83,7 @@ const BunnyChat = () => {
     }, 2000);
   };
 
+
   const renderCalming = () => {
     switch(activeSection) {
       case 'breathe':
