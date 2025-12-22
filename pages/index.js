@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, DollarSign, Ticket, Heart, Phone, Video, Send, Plus, Sparkles } from 'lucide-react';
 
 const BunnyChat = () => {
@@ -189,7 +189,7 @@ const BunnyChat = () => {
   };
 
   return (
-    <div className="fixed bottom-16 right-4 z-50">
+    <div className="absolute bottom-28 right-4 z-50">
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-72 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl">
           <div className="bg-gradient-to-r from-pink-400 to-purple-400 p-3 rounded-t-2xl flex items-center justify-between">
@@ -298,42 +298,52 @@ export default function Home() {
 
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [coffeeInviteSent, setCoffeeInviteSent] = useState(false);
+  const [showWallet, setShowWallet] = useState(false);
+
+  // Helper to clear bottom navigation selection
+  const clearBottomNav = () => {
+    setSelectedCategory(null);
+  };
 
   const profiles = {
     nearby: [
       {
         id: 10,
         name: "John",
-        age: 20,
+        age: 28,
         gender: "boy",
-        year: "2nd year",
-        major: "Computer Science",
+        year: null,
+        major: null,
+        occupation: "Software Engineer",
         photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
-        location: "science library",
+        location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
       },
       {
         id: 11,
         name: "Mara",
-        age: 21,
+        age: 32,
         gender: "girl",
-        year: "3rd year",
-        major: "Business",
+        year: null,
+        major: null,
+        occupation: "Marketing Manager",
         photos: ["/images/users/Mara/1.jpg", "/images/users/Mara/2.jpg"],
-        location: "student center",
+        location: "Blue Bottle Coffee, NYC",
         status: 'connected',
         isNearby: true
       },
       {
         id: 12,
         name: "Sarah",
-        age: 19,
+        age: 26,
         gender: "girl",
-        year: "2nd year",
-        major: "Psychology",
+        year: null,
+        major: null,
+        occupation: "Graphic Designer",
         photos: ["/images/users/Sarah/1.jpg", "/images/users/Sarah/2.jpg"],
-        location: "campus cafe",
+        location: "LaGuardia Airport - Terminal B",
         status: 'waiting',
         isNearby: true
       }
@@ -476,7 +486,6 @@ export default function Home() {
       setChatMessages([...chatMessages, { text: chatInput, sender: 'user', time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) }]);
       setChatInput('');
       
-      // Simulate response
       setTimeout(() => {
         setChatMessages(prev => [...prev, { 
           text: "Great! See you soon! 😊", 
@@ -488,10 +497,10 @@ export default function Home() {
   };
 
   const MoodCard = ({ user }) => {
-    const cardConnected = user.status === 'connected';
+    const cardConnected = user.status === 'connected' || user.isEvent;
     
     return (
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-3 border border-gray-100 hover:shadow-xl transition-all max-w-xs mx-auto">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-3 border border-gray-100 hover:shadow-xl transition-all w-full">
         {user.price && (
           <div className="flex justify-end p-2 pb-0">
             <div className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
@@ -506,20 +515,19 @@ export default function Home() {
           </div>
         )}
 
-        <div className={`relative h-96 ${cardConnected ? 'bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100' : 'bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50'}`}>
+        <div className={`relative h-80 ${cardConnected ? 'bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100' : 'bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50'}`}>
           <div className="absolute left-4 top-1/2 -translate-y-1/2 space-y-2 z-10">
-            <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-gray-300' : 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-pulse'}`} />
-            <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)] animate-pulse' : 'bg-gray-300'}`} />
+            <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-gray-300' : 'bg-red-500 animate-pulse'}`} />
+            <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-green-400 animate-pulse' : 'bg-gray-300'}`} />
           </div>
 
-          <div className="absolute inset-1 rounded-2xl overflow-hidden shadow-2xl">
-  <img
-  src={`/images/snap-emojis/${user.name?.toLowerCase() || 'default'}.png`}
-  alt="Snap"
-  className="w-full h-full object-cover transition-all"
-/>
-
-</div>
+          <div className="absolute inset-2 rounded-2xl overflow-hidden shadow-2xl">
+            <img
+              src={`/images/snap-emojis/${user.name?.toLowerCase() || 'default'}.png`}
+              alt="Snap"
+              className="w-full h-full object-contain transition-all"
+            />
+          </div>
 
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10">
             <span className={`text-xs px-3 py-1 rounded-full font-medium ${cardConnected ? 'bg-pink-100 text-pink-600 border border-pink-300' : 'bg-gray-100 text-gray-600 border border-gray-300'}`}>
@@ -531,15 +539,18 @@ export default function Home() {
         <div className="p-3">
           <button
             onClick={() => {
+              clearBottomNav();
               setSelectedProfile(user);
               setShowProfile(true);
               setIsConnected(false);
               setCurrentPhotoIndex(0);
               setShowFullImage(false);
               setShowChat(false);
+              setShowTicket(false);
               setChatMessages([]);
+              setCoffeeInviteSent(false);
             }}
-            className="w-full py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-full font-semibold text-sm transition-all shadow-md hover:shadow-lg"
+            className="w-full py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white rounded-full font-semibold text-sm transition-colors"
           >
             view profile
           </button>
@@ -548,8 +559,98 @@ export default function Home() {
     );
   };
 
+  const TicketView = ({ user }) => {
+    const ticketNumber = Math.floor(Math.random() * 10000);
+    
+    return (
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-pink-900 to-purple-900 z-[60] overflow-y-auto p-4">
+        <div className="flex items-center justify-center min-h-full">
+          <div className="w-full">
+            <button 
+              onClick={() => setShowTicket(false)} 
+              className="absolute top-4 left-4 text-white/80 hover:text-white z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
+              <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 p-6 text-center relative">
+                <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white/10 to-transparent"></div>
+                <div className="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center text-5xl shadow-lg relative z-10 animate-bounce">
+                  🎫
+                </div>
+                <h2 className="text-white font-bold text-2xl mb-1 relative z-10">Your Ticket!</h2>
+                <p className="text-white/90 text-sm relative z-10">See you there! ✨</p>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div className="text-center border-b border-dashed border-gray-300 pb-4">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{user.name}</h3>
+                  <p className="text-pink-500 italic text-sm leading-relaxed">"{user.mood}"</p>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4 border border-pink-100">
+                    <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                      📅
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Date & Time</p>
+                      <p className="font-bold text-gray-800 text-base">{user.eventDate}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                      📍
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Location</p>
+                      <p className="font-bold text-gray-800 text-sm">{user.location}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                      💰
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Price</p>
+                      <p className="font-bold text-gray-800 text-xl">{user.price}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-dashed border-gray-300">
+                  <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-dashed border-pink-200">
+                    <div className="bg-white p-4 rounded-xl mb-3 flex items-center justify-center shadow-inner">
+                      <svg width="140" height="140" viewBox="0 0 29 29">
+                        <rect width="29" height="29" fill="white"/>
+                        <path d="M1,1h7v7h-7z M9,1h1v1h1v1h-1v1h-2v-1h1z M11,1h2v1h1v2h-1v1h-1v-2h-1z M15,1h1v1h-1z M17,1h1v2h1v-1h2v1h-1v1h1v1h-2v-1h-1v1h-1v-1h-1v-1h1v-1h1z M21,1h7v7h-7z M2,2v5h5v-5z M22,2v5h5v-5z M3,3h3v3h-3z M23,3h3v3h-3z M9,5h1v1h-1z M11,5h2v1h1v1h-2v1h-1v-2h-1v-1h1z M15,5h1v1h-1z M19,5h1v1h-1z M10,6h1v1h-1z M1,9h1v2h1v-1h2v1h-1v1h-1v1h-1v-1h-1z M5,9h1v2h-1z M9,9h1v1h1v-1h2v2h-2v1h-1v-1h-1v1h-1v-2h1z M14,9h1v1h-1z M16,9h1v2h-1v1h-1v-3h1z M19,9h1v1h-1z M6,10h1v1h-1z M20,10h1v2h-1z M4,11h1v1h-1z M7,11h1v2h-1v1h-1v-1h-1v-2h1v1h1z M14,11h1v1h-1z M22,11h3v1h-2v1h-1z M26,11h2v1h-2z M5,12h1v1h-1z M10,12h1v1h-1z M18,12h1v1h-1z M1,13h1v1h1v-1h1v1h-1v1h-2z M13,13h1v1h-1z M21,13h1v2h-1z M25,13h1v3h-1v1h-1v-2h-1v-1h2z M4,14h1v1h-1z M9,14h1v1h-1z M19,14h1v1h-1z M27,14h1v1h-1z M11,15h1v2h-1z M13,15h3v1h-2v1h-1z M17,15h2v1h1v1h-3v1h-1v-3h1z M22,15h1v1h-1z M1,16h1v1h-1z M3,16h4v1h-1v1h-1v-1h-2z M8,16h2v1h1v1h-2v1h-2v-1h1z M20,16h1v1h-1z M23,16h1v1h-1z M26,16h2v1h-2z M13,17h1v1h-1z M21,17h1v2h-1z M1,18h2v1h-2z M4,18h2v1h1v2h-1v-1h-1v1h-1v-1h-1v-1h1z M14,18h1v1h1v1h-1v1h-1z M17,18h1v1h-1z M19,18h1v1h-1z M26,18h2v1h-2z M9,19h2v1h-2z M12,19h1v1h-1z M22,19h2v1h-1v1h-1z M1,20h1v1h-1z M7,20h1v1h1v1h-1v1h-2v-2h1z M16,20h1v1h-1z M18,20h1v1h-1z M25,20h2v1h-2z M2,21h1v2h2v-1h1v2h-1v1h-2v1h-1v-1h-1v-3h1z M10,21h1v1h-1z M12,21h2v2h-1v-1h-1z M15,21h1v1h1v1h-2z M20,21h1v1h-1z M24,21h1v2h2v2h-1v-1h-2v-1h1v-1h-1z M27,21h1v1h-1z M5,22h2v1h-1v1h-1z M17,22h1v1h-1z M19,22h2v1h-1v1h-1z M9,23h1v1h1v1h-1v1h-1v-2h-1v-1h1z M11,23h1v2h-1z M14,23h1v1h-1z M22,23h1v1h-1z M26,23h2v1h-1v1h-1z M4,24h1v1h-1z M15,24h2v1h-1v1h-1z M19,24h2v1h-2z M5,25h2v1h-2z M12,25h1v1h1v1h-2z M17,25h1v1h-1z M21,25h1v2h-1z M1,26h1v1h-1z M7,26h1v1h-1z M9,26h1v1h-1z M14,26h1v1h-1z M18,26h2v1h-2z M23,26h1v1h-1z M25,26h1v2h-1z M27,26h1v1h-1z M2,27h1v1h-1z M4,27h3v1h-3z M8,27h1v1h-1z M10,27h2v1h-2z M15,27h1v1h-1z M17,27h1v1h-1z M20,27h1v1h-1z M22,27h1v1h-1z M26,27h2v1h-2z" fill="black"/>
+                        <path d="M1,1h7v7h-7z M2,2v5h5v-5z M3,3h3v3h-3z" fill="black"/>
+                        <path d="M21,1h7v7h-7z M22,2v5h5v-5z M23,3h3v3h-3z" fill="black"/>
+                        <path d="M1,21h7v7h-7z M2,22v5h5v-5z M3,23h3v3h-3z" fill="black"/>
+                      </svg>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg text-gray-800 font-mono font-bold mb-1">TICKET #{ticketNumber}</p>
+                      <p className="text-xs text-gray-500 mt-2 font-medium">Show QR code at entrance</p>
+                      <div className="mt-3 pt-3 border-t border-pink-200">
+                        <p className="text-xs text-pink-600 font-semibold">Valid for event date only</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const ChatView = ({ user }) => (
-    <div className="absolute inset-0 bg-white z-50 flex flex-col max-w-sm mx-auto">
+    <div className="absolute inset-0 bg-white z-[60] flex flex-col">
       <div className="bg-gradient-to-r from-pink-400 to-purple-400 p-3 flex items-center gap-3">
         <button onClick={() => setShowChat(false)} className="text-white">
           <X className="w-5 h-5" />
@@ -586,6 +687,22 @@ export default function Home() {
       </div>
 
       <div className="p-3 bg-white border-t">
+        {selectedProfile?.price && (
+          <div className="mb-3 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-xl p-3 flex items-center justify-between shadow-lg">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                💰
+              </div>
+              <div>
+                <p className="text-xs font-semibold">Payment Required</p>
+                <p className="text-sm font-bold">{selectedProfile.price}</p>
+              </div>
+            </div>
+            <button className="bg-white text-green-600 px-4 py-2 rounded-full text-sm font-bold hover:bg-green-50 transition-all">
+              Pay Now
+            </button>
+          </div>
+        )}
         <div className="flex gap-2">
           <input
             type="text"
@@ -607,6 +724,8 @@ export default function Home() {
   );
 
   const ProfileView = ({ user }) => {
+    const scrollRef = useRef(null);
+    
     const getGenderEmoji = (gender) => {
       if (gender === 'boy') return '👨';
       if (gender === 'girl') return '👩';
@@ -614,7 +733,7 @@ export default function Home() {
     };
 
     return (
-      <div className="absolute inset-0 bg-black z-50 overflow-y-auto max-w-sm mx-auto">
+      <div className="absolute inset-0 bg-black z-50 flex flex-col">
         <div className="sticky top-0 z-10 flex items-center justify-between p-3 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-xl border-b border-white/10">
           <button onClick={() => setShowProfile(false)} className="text-white">
             <X className="w-5 h-5" />
@@ -625,6 +744,11 @@ export default function Home() {
           <div className="w-5" />
         </div>
 
+        <div 
+          ref={scrollRef} 
+          className="flex-1 overflow-y-auto overscroll-contain" 
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
         <div className="px-4 pt-4 pb-6">
           <div className="text-center mb-4">
             <p className="text-white font-bold text-xl mb-1">{user.name}{user.age ? `, ${user.age}` : ''}</p>
@@ -632,20 +756,27 @@ export default function Home() {
             {user.year && user.major && (
               <p className="text-gray-400 text-sm">{user.year} • {user.major}</p>
             )}
+            {user.occupation && (
+              <p className="text-gray-400 text-sm">{user.occupation}</p>
+            )}
             <p className="text-gray-400 text-sm mt-1">📍 {user.location}</p>
           </div>
 
-          <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl animate-pulse">
-                🎵
+          {!user.isEvent && (
+            <>
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl animate-pulse">
+                    🎵
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm">listening now</p>
+                    <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-sm">listening now</p>
-                <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
 
           <div className="relative mb-4">
             <div className="aspect-square rounded-2xl overflow-hidden border border-white/10">
@@ -701,81 +832,114 @@ export default function Home() {
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-lg">
-                  🏃
+          {!user.isEvent && (
+            <>
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-lg">
+                      🏃
+                    </div>
+                    <p className="text-white font-semibold text-xs">ran today</p>
+                  </div>
+                  <p className="text-green-400 text-xs">5.2 km • 28 min</p>
                 </div>
-                <p className="text-white font-semibold text-xs">ran today</p>
-              </div>
-              <p className="text-green-400 text-xs">5.2 km • 28 min</p>
-            </div>
 
-            <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-lg">
-                  ✨
+                <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-lg">
+                      ✨
+                    </div>
+                    <p className="text-white font-semibold text-xs">vibe</p>
+                  </div>
+                  <p className="text-purple-400 text-xs">chill • friendly</p>
                 </div>
-                <p className="text-white font-semibold text-xs">vibe</p>
               </div>
-              <p className="text-purple-400 text-xs">chill • friendly</p>
-            </div>
-          </div>
 
-          <div className="mb-3 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-2xl">
-                ⚡
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-2xl">
+                    ⚡
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm">last active</p>
+                    <p className="text-blue-400 text-xs">online now • {user.location}</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-sm">last active</p>
-                <p className="text-blue-400 text-xs">online now • campus library</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center text-2xl">
-                🔥
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center text-2xl">
+                    🔥
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm">streak</p>
+                    <p className="text-orange-400 text-xs">12 days connecting • keep it going!</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-sm">streak</p>
-                <p className="text-orange-400 text-xs">12 days connecting • keep it going!</p>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
 
           <div className="space-y-2">
             {user.isEvent ? (
               <button 
-                onClick={() => setShowChat(true)}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  clearBottomNav();
+                  setShowTicket(true);
+                }}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all active:scale-95"
               >
                 <Ticket className="w-5 h-5" />
                 buy ticket - {user.price}
               </button>
             ) : user.isNearby ? (
-              <button 
-                onClick={() => setShowChat(true)}
-                className="w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg animate-pulse hover:scale-105 transition-all"
-              >
-                <span className="text-2xl animate-bounce">☕</span>
-                invite to coffee
-              </button>
+              coffeeInviteSent ? (
+                <div className="w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                  <span className="text-2xl">✓</span>
+                  coffee invitation sent!
+                </div>
+              ) : (
+                <button 
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setCoffeeInviteSent(true);
+                  }}
+                  className="w-full bg-gradient-to-r from-orange-400 to-pink-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all active:scale-95"
+                >
+                  <span className="text-2xl">☕</span>
+                  invite to coffee
+                </button>
+              )
             ) : !isConnected ? (
               <button 
-                onClick={() => setIsConnected(true)}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsConnected(true);
+                }}
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all active:scale-95"
               >
                 <Heart className="w-5 h-5" />
                 connect
               </button>
             ) : (
               <button 
-                onClick={() => setShowChat(true)}
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg animate-pulse hover:scale-105 transition-all"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  clearBottomNav();
+                  setShowChat(true);
+                }}
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all active:scale-95"
               >
                 <MessageCircle className="w-5 h-5" />
                 start chat
@@ -783,79 +947,248 @@ export default function Home() {
             )}
           </div>
         </div>
+        </div>
       </div>
     );
   };
 
-  if (showChat && selectedProfile) return <ChatView user={selectedProfile} />;
-  if (showProfile && selectedProfile) return <ProfileView user={selectedProfile} />;
-
-  return (
-    <main className="h-screen w-full max-w-2xl mx-auto relative overflow-hidden bg-white">
-      <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-
-      <div className="h-[calc(100%-80px)] w-full relative overflow-y-auto p-4">
-        {selectedCategory && (
-          <div className="space-y-3">
-            {profiles[selectedCategory]?.map((profile) => (
-              <MoodCard key={profile.id} user={profile} />
-            ))}
-          </div>
-        )}
-
-        {!selectedCategory && (
-          <div className="flex items-center justify-center h-full text-gray-400 text-center">
-            <div>
-              <p className="text-4xl mb-3">👇</p>
-              <p>Select a category below to see who's around</p>
-            </div>
-          </div>
-        )}
+  const WalletView = () => (
+    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 z-[60] overflow-y-auto p-4">
+      <div className="flex items-center justify-between mb-6 pt-2">
+        <button 
+          onClick={() => setShowWallet(false)} 
+          className="text-white/80 hover:text-white"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        <h2 className="text-white font-bold text-xl">My Wallet</h2>
+        <div className="w-6"></div>
       </div>
 
-      <BunnyChat />
-
-      <div className="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-lg">
-  <div className="p-5 overflow-x-auto scrollbar-hide min-h-[90px]">
-
-          <div className="flex gap-2" style={{minWidth: 'max-content'}}>
-            {[
-              { id: 'nearby', image: '/images/nearby.jpg'},
-              { id: 'events', image: '/images/events.jpg'},
-              { id: 'social', image: '/images/coffee.jpg'},
-              { id: 'rides', image: '/images/car.jpg'},
-              { id: 'study', image: '/images/studying.jpg'},
-              { id: 'sports', image: '/images/playing.jpg'},
-              
-            ].map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`p-3 rounded-full transition-all transform hover:scale-105 flex-shrink-0 ${
-                  selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-110'
-                    : 'bg-gray-50 text-gray-600'
-                }`}
-              >
-                <div className="w-10 h-10 flex items-center justify-center">
-                  <img 
-                    src={category.image}
-                    alt={category.id}
-                    className="w-full h-full object-cover rounded-full"
-                  />
+      <div className="space-y-4">
+        {/* Debit Card */}
+        <div className="relative h-52 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all">
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-600"></div>
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
+          </div>
+          
+          <div className="relative h-full p-6 flex flex-col justify-between">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-white/80 text-xs font-semibold mb-1">Current Balance</p>
+                <p className="text-white text-3xl font-bold">$847.50</p>
+              </div>
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <span className="text-2xl">💳</span>
+              </div>
+            </div>
+            
+            <div>
+              <div className="mb-3">
+                <p className="text-white/60 text-xs mb-1">Card Number</p>
+                <p className="text-white font-mono text-lg tracking-wider">•••• •••• •••• 4829</p>
+              </div>
+              <div className="flex justify-between items-end">
+                <div>
+                  <p className="text-white/60 text-xs mb-1">Card Holder</p>
+                  <p className="text-white font-semibold text-sm">Alex Rodriguez</p>
                 </div>
-              </button>
-            ))}
+                <div>
+                  <p className="text-white/60 text-xs mb-1">Expires</p>
+                  <p className="text-white font-semibold text-sm">12/27</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Earnings Section */}
+        <div className="bg-white rounded-2xl p-5 shadow-xl">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-800 font-bold text-lg">This Month</h3>
+            <div className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+              +$247.50
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl">🎓</span>
+                </div>
+                <div>
+                  <p className="text-gray-800 font-semibold text-sm">Tutoring Sessions</p>
+                  <p className="text-gray-500 text-xs">12 sessions</p>
+                </div>
+              </div>
+              <p className="text-green-600 font-bold">$120.00</p>
+            </div>
+
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl">🚗</span>
+                </div>
+                <div>
+                  <p className="text-gray-800 font-semibold text-sm">Ride Shares</p>
+                  <p className="text-gray-500 text-xs">8 trips</p>
+                </div>
+              </div>
+              <p className="text-green-600 font-bold">$40.00</p>
+            </div>
+
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
+                  <span className="text-xl">🎫</span>
+                </div>
+                <div>
+                  <p className="text-gray-800 font-semibold text-sm">Event Tickets</p>
+                  <p className="text-gray-500 text-xs">15 sold</p>
+                </div>
+              </div>
+              <p className="text-green-600 font-bold">$87.50</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Potential Earnings */}
+        <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-5 shadow-xl text-white">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <span className="text-2xl">🚀</span>
+            </div>
+            <h3 className="font-bold text-lg">Unlock More Earnings</h3>
+          </div>
+          
+          <p className="text-white/90 text-sm mb-4 leading-relaxed">
+            Complete 5 more sessions this week to earn a <span className="font-bold">$50 bonus!</span>
+          </p>
+          
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2">
+              <div className="flex-1 bg-white/20 rounded-full h-2 overflow-hidden">
+                <div className="bg-white h-full rounded-full" style={{width: '60%'}}></div>
+              </div>
+              <span className="text-xs font-semibold">3/5</span>
+            </div>
+          </div>
+
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-white/80">Potential this week:</span>
+              <span className="font-bold text-lg">+$185</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-white/60">Average per session:</span>
+              <span className="font-semibold">$12.50</span>
+            </div>
+          </div>
+
+          <button className="w-full mt-4 bg-white text-purple-600 py-3 rounded-xl font-bold hover:bg-purple-50 transition-all shadow-lg">
+            Tap to Pay 💳
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <main className="h-screen w-full flex justify-center bg-gray-100">
+      <div className="relative w-full max-w-[390px] bg-white overflow-hidden flex flex-col">
+        <style jsx global>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+
+        <div className="flex-1 overflow-y-auto p-4 pb-24">
+          {selectedCategory && (
+            <div className="space-y-3">
+              {profiles[selectedCategory]?.map((profile) => (
+                <MoodCard key={profile.id} user={profile} />
+              ))}
+            </div>
+          )}
+
+          {!selectedCategory && (
+            <div className="flex items-center justify-center h-full text-gray-400 text-center">
+              <div>
+                <p className="text-4xl mb-3">👇</p>
+                <p>Select a category below to see who's around</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <BunnyChat />
+
+        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white rounded-t-3xl shadow-lg z-40">
+          <div className="p-3 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2" style={{minWidth: 'max-content'}}>
+              {[
+                { id: 'nearby', image: '/images/nearby.jpg'},
+                { id: 'events', image: '/images/events.jpg'},
+                { id: 'social', image: '/images/coffee.jpg'},
+                { id: 'rides', image: '/images/car.jpg'},
+                { id: 'study', image: '/images/studying.jpg'},
+                { id: 'sports', image: '/images/playing.jpg'},
+                { id: 'wallet', isWallet: true, icon: '💳'},
+              ].map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => {
+                    if (category.isWallet) {
+                      clearBottomNav();
+                      setShowWallet(true);
+                    } else {
+                      setSelectedCategory(category.id);
+                    }
+                  }}
+                  className={`p-2 rounded-full transition-all transform hover:scale-105 flex-shrink-0 ${
+                    category.isWallet
+                      ? 'bg-gray-50 text-gray-600 hover:bg-pink-50'
+                      : selectedCategory === category.id
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-110'
+                      : 'bg-gray-50 text-gray-600 hover:bg-pink-50'
+                  }`}
+                >
+                  {category.isWallet ? (
+                    <div className="w-9 h-9 flex items-center justify-center">
+                      <span className="text-2xl">{category.icon}</span>
+                    </div>
+                  ) : (
+                    <div className="w-9 h-9 flex items-center justify-center">
+                      <img 
+                        src={category.image}
+                        alt={category.id}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Modals - rendered inside phone container */}
+        {showProfile && selectedProfile && (
+          <ProfileView
+            key={`profile-${selectedProfile.id}`}
+            user={selectedProfile}
+          />
+        )}
+        {showWallet && <WalletView />}
+        {showChat && selectedProfile && <ChatView user={selectedProfile} />}
+        {showTicket && selectedProfile && <TicketView user={selectedProfile} />}
       </div>
     </main>
   );
