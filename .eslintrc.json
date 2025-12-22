@@ -1,3 +1,25 @@
 {
-  "extends": "next/core-web-vitals"
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@next/next/recommended"
+  ],
+  "plugins": ["react", "@next/next"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "@next/next/no-img-element": "off"
+  }
 }
