@@ -560,7 +560,7 @@ export default function Home() {
         year: null,
         major: null,
         occupation: "Software Engineer",
-        photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
+        photos: ["/images/users/john/1.jpg", "/images/users/john/2.jpg"],
         location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
@@ -1097,17 +1097,29 @@ export default function Home() {
 
           {!user.isEvent && (
             <>
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // Open Bunny chat with throw song pre-selected
+                  clearBottomNav();
+                  setShowProfile(false);
+                  // This would trigger Bunny chat in real implementation
+                }}
+                className="w-full mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-pink-500/30 transition-all active:scale-95"
+              >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
                     🎵
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 text-left">
                     <p className="text-white font-semibold text-xs">listening now</p>
                     <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
                   </div>
+                  <div className="text-purple-400 text-xs">
+                    throw a vibe →
+                  </div>
                 </div>
-              </div>
+              </button>
             </>
           )}
 
@@ -1288,22 +1300,24 @@ export default function Home() {
   };
 
   const WalletView = () => (
-    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 z-[60] overflow-y-auto p-4">
-      <div className="flex items-center justify-between mb-4 pt-2">
-        <button 
-          onClick={() => setShowWallet(false)} 
-          className="text-white/80 hover:text-white"
-        >
-          <X className="w-6 h-6" />
-        </button>
-        <h2 className="text-white font-bold text-lg">My Wallet</h2>
-        <div className="w-6"></div>
+    <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-purple-950 z-[60] overflow-y-auto">
+      <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20 p-4">
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => setShowWallet(false)} 
+            className="text-purple-400 hover:text-purple-300 bg-purple-500/10 backdrop-blur-sm rounded-full p-2"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <h2 className="text-white font-bold text-lg">My Wallet</h2>
+          <div className="w-10"></div>
+        </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="p-4 space-y-3">
         {/* Debit Card */}
-        <div className="relative h-44 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all">
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-600"></div>
+        <div className="relative h-44 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all border border-purple-500/20">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700"></div>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
@@ -1340,58 +1354,58 @@ export default function Home() {
         </div>
 
         {/* Earnings Section */}
-        <div className="bg-white rounded-2xl p-4 shadow-xl">
+        <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-purple-500/20">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-gray-800 font-bold text-base">This Month</h3>
-            <div className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+            <h3 className="text-white font-bold text-base">This Month</h3>
+            <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
               +$247.50
             </div>
           </div>
           
           <div className="space-y-2">
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
                   <span className="text-lg">🎓</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-xs">Tutoring Sessions</p>
-                  <p className="text-gray-500 text-xs">12 sessions</p>
+                  <p className="text-white font-semibold text-xs">Tutoring Sessions</p>
+                  <p className="text-purple-300 text-xs">12 sessions</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold text-sm">$120.00</p>
+              <p className="text-green-400 font-bold text-sm">$120.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
                   <span className="text-lg">🚗</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-xs">Ride Shares</p>
-                  <p className="text-gray-500 text-xs">8 trips</p>
+                  <p className="text-white font-semibold text-xs">Ride Shares</p>
+                  <p className="text-purple-300 text-xs">8 trips</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold text-sm">$40.00</p>
+              <p className="text-green-400 font-bold text-sm">$40.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
                   <span className="text-lg">🎫</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-xs">Event Tickets</p>
-                  <p className="text-gray-500 text-xs">15 sold</p>
+                  <p className="text-white font-semibold text-xs">Event Tickets</p>
+                  <p className="text-purple-300 text-xs">15 sold</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold text-sm">$87.50</p>
+              <p className="text-green-400 font-bold text-sm">$87.50</p>
             </div>
           </div>
         </div>
 
         {/* Potential Earnings */}
-        <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-4 shadow-xl text-white">
+        <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-2xl p-4 shadow-xl text-white border border-purple-400/30">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
               <span className="text-xl">🚀</span>
@@ -1466,16 +1480,19 @@ export default function Home() {
           )}
 
           {!selectedCategory && (
-            <div className="flex items-center justify-center h-full text-center">
-              <div>
-                <p className="text-4xl mb-3">💜</p>
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-lg mb-2">
+            <div className="flex items-center justify-center h-full">
+              <div className="relative z-10 text-center px-6">
+                <div className="absolute inset-0 -z-10">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-purple-500/20 blur-3xl animate-pulse"></div>
+                </div>
+                <p className="text-6xl mb-4 animate-bounce">💜</p>
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 font-bold text-2xl mb-3">
                   welcome to the bubble world
                 </p>
-                <p className="text-purple-400 text-sm">
+                <p className="text-purple-500 text-lg font-semibold mb-2">
                   {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
-                <p className="text-gray-500 text-xs mt-4">select a category below to start</p>
+                <p className="text-gray-400 text-sm mt-6">select a category below to start connecting ✨</p>
               </div>
             </div>
           )}
@@ -1483,7 +1500,7 @@ export default function Home() {
 
         <BunnyChat />
 
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-gray-900 to-transparent backdrop-blur-xl shadow-2xl z-40 border-t border-purple-500/20">
+        <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
           <div className="p-2 overflow-x-auto scrollbar-hide">
             <div className="flex gap-2" style={{minWidth: 'max-content'}}>
               {[
@@ -1507,10 +1524,10 @@ export default function Home() {
                   }}
                   className={`p-2 rounded-full transition-all transform hover:scale-105 flex-shrink-0 ${
                     category.isWallet
-                      ? 'bg-gray-900/50 border border-purple-500/30'
+                      ? 'bg-gray-50 text-gray-600 hover:bg-pink-50'
                       : selectedCategory === category.id
-                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 shadow-lg shadow-pink-500/50 scale-110 border-2 border-pink-400'
-                      : 'bg-gray-900/50 border border-purple-500/20 hover:border-purple-500/40'
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-110'
+                      : 'bg-gray-50 text-gray-600 hover:bg-pink-50'
                   }`}
                 >
                   {category.isWallet ? (
