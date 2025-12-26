@@ -21,7 +21,8 @@ const BunnyChat = () => {
   const mainOptions = [
     { id: 'calm', text: 'stressed rn 😮‍💫', icon: '🫧' },
     { id: 'talk', text: 'need to vent, i will help you 🥺', icon: '💭' },
-    { id: 'find', text: 'find someone 💫', icon: '✨' }
+    { id: 'find', text: 'find someone 💫', icon: '✨' },
+    { id: 'throw', text: 'throw a vibe ✨🎯', icon: '🎲' }
   ];
 
   const sections = {
@@ -47,6 +48,13 @@ const BunnyChat = () => {
         'study buddy 📚',
         'just hangout 🌸',
         'someone to talk to 🗣️'
+      ]
+    },
+    throw: {
+      options: [
+        { text: 'throw a thought 💭', action: 'throw-thought' },
+        { text: 'throw a song 🎵', action: 'throw-song' },
+        { text: 'throw a mood ✨', action: 'throw-mood' }
       ]
     }
   };
@@ -157,15 +165,37 @@ const BunnyChat = () => {
 
               {/* Avatar-style particles dropping */}
               <div className="absolute inset-0">
+                <style jsx>{`
+                  @keyframes floatDown {
+                    0% {
+                      transform: translateY(-100%) translateX(0);
+                      opacity: 0;
+                    }
+                    10% {
+                      opacity: 1;
+                    }
+                    90% {
+                      opacity: 1;
+                    }
+                    100% {
+                      transform: translateY(250%) translateX(var(--drift));
+                      opacity: 0;
+                    }
+                  }
+                  .particle {
+                    animation: floatDown var(--duration) linear infinite;
+                    animation-delay: var(--delay);
+                  }
+                `}</style>
                 {[...Array(20)].map((_, i) => (
                   <div
                     key={i}
-                    className="absolute w-1 h-1 bg-purple-400 rounded-full animate-float opacity-60"
+                    className="particle absolute w-1 h-1 bg-purple-400 rounded-full"
                     style={{
                       left: `${Math.random() * 100}%`,
-                      top: `-${Math.random() * 20}%`,
-                      animationDelay: `${Math.random() * 5}s`,
-                      animationDuration: `${3 + Math.random() * 4}s`,
+                      '--drift': `${(Math.random() - 0.5) * 100}px`,
+                      '--delay': `${Math.random() * 5}s`,
+                      '--duration': `${3 + Math.random() * 4}s`,
                       boxShadow: '0 0 8px rgba(168, 85, 247, 0.8)'
                     }}
                   />
@@ -173,12 +203,12 @@ const BunnyChat = () => {
                 {[...Array(15)].map((_, i) => (
                   <div
                     key={`pink-${i}`}
-                    className="absolute w-1 h-1 bg-pink-400 rounded-full animate-float opacity-60"
+                    className="particle absolute w-1 h-1 bg-pink-400 rounded-full"
                     style={{
                       left: `${Math.random() * 100}%`,
-                      top: `-${Math.random() * 20}%`,
-                      animationDelay: `${Math.random() * 5}s`,
-                      animationDuration: `${4 + Math.random() * 3}s`,
+                      '--drift': `${(Math.random() - 0.5) * 100}px`,
+                      '--delay': `${Math.random() * 5}s`,
+                      '--duration': `${4 + Math.random() * 3}s`,
                       boxShadow: '0 0 8px rgba(236, 72, 153, 0.8)'
                     }}
                   />
@@ -200,6 +230,52 @@ const BunnyChat = () => {
 
               {/* Glow effect */}
               <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-purple-500/30 to-transparent blur-2xl" />
+            </div>
+          </div>
+        );
+
+      case 'throw-thought':
+      case 'throw-song':
+      case 'throw-mood':
+        return (
+          <div className="space-y-4">
+            <div className="bg-gradient-to-br from-purple-900/60 to-pink-900/60 backdrop-blur-sm rounded-2xl p-4 border border-purple-500/30">
+              <div className="text-center mb-4">
+                <div className="text-5xl mb-3 animate-bounce">
+                  {activeSection === 'throw-thought' ? '💭' : activeSection === 'throw-song' ? '🎵' : '✨'}
+                </div>
+                <p className="text-purple-100 font-semibold mb-2">
+                  {activeSection === 'throw-thought' && 'throw a random thought'}
+                  {activeSection === 'throw-song' && 'throw a song vibe'}
+                  {activeSection === 'throw-mood' && 'throw a mood check'}
+                </p>
+                <p className="text-purple-300 text-xs">
+                  send it to someone nearby. if they vibe with it, you'll match for coffee! ☕✨
+                </p>
+              </div>
+
+              <textarea
+                placeholder={
+                  activeSection === 'throw-thought' 
+                    ? "what's on your mind? 💭" 
+                    : activeSection === 'throw-song'
+                    ? "what song are you feeling? 🎵"
+                    : "what's your vibe rn? ✨"
+                }
+                className="w-full h-24 px-4 py-3 rounded-xl bg-purple-950/50 text-purple-100 
+                  placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 
+                  focus:ring-2 focus:ring-purple-500/50 transition-all resize-none text-sm"
+              />
+
+              <button className="w-full mt-3 py-3 bg-gradient-to-r from-pink-500 to-purple-500 
+                text-white rounded-xl font-bold hover:shadow-lg hover:shadow-purple-500/50 
+                transition-all flex items-center justify-center gap-2">
+                <span>throw it! 🎯</span>
+              </button>
+
+              <p className="text-purple-400 text-xs text-center mt-3">
+                gen z connection game • real vibes only 💜
+              </p>
             </div>
           </div>
         );
@@ -394,7 +470,7 @@ export default function Home() {
         year: null,
         major: null,
         occupation: "Software Engineer",
-        photos: ["/images/users/john/1.jpg", "/images/users/john/2.jpg"],
+        photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
         location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
@@ -601,13 +677,18 @@ export default function Home() {
 
           <div className="absolute inset-2 rounded-2xl overflow-hidden shadow-2xl">
             <img
-              src={`/images/snap-emojis/${user.name?.toLowerCase().replace(/\s+/g, '-') || 'default'}.png`}
+              src={user.isEvent 
+                ? `/images/snap-emojis/event.png`
+                : `/images/snap-emojis/${user.name?.toLowerCase().replace(/\s+/g, '-') || 'default'}.png`
+              }
               alt="Snap"
               className="w-full h-full object-contain transition-all"
               onError={(e) => {
-                // Fallback to just firstname if full name doesn't work
-                const firstName = user.name?.toLowerCase().split(' ')[0] || 'default';
-                e.target.src = `/images/snap-emojis/${firstName}.png`;
+                if (!user.isEvent) {
+                  // Fallback to just firstname if full name doesn't work
+                  const firstName = user.name?.toLowerCase().split(' ')[0] || 'default';
+                  e.target.src = `/images/snap-emojis/${firstName}.png`;
+                }
               }}
             />
           </div>
@@ -920,7 +1001,7 @@ export default function Home() {
           onClick={(e) => e.stopPropagation()}
         >
         <div className="px-4 pt-3 pb-6">
-          <div className="text-center mb-3">
+          <div className="text-center mb-3" onClick={(e) => e.stopPropagation()}>
             <p className="text-white font-bold text-lg mb-1">{user.name}{user.age ? `, ${user.age}` : ''}</p>
             {user.mood && <p className="text-pink-400 italic text-sm mb-1">"{user.mood}"</p>}
             {user.year && user.major && (
@@ -934,7 +1015,7 @@ export default function Home() {
 
           {!user.isEvent && (
             <>
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
                     🎵
@@ -948,7 +1029,7 @@ export default function Home() {
             </>
           )}
 
-          <div className="relative mb-3">
+          <div className="relative mb-3" onClick={(e) => e.stopPropagation()}>
             <div className="aspect-square rounded-2xl overflow-hidden border border-white/10">
               <img 
                 src={user.photos[currentPhotoIndex]} 
@@ -1004,7 +1085,7 @@ export default function Home() {
 
           {!user.isEvent && (
             <>
-              <div className="grid grid-cols-2 gap-2 mb-3">
+              <div className="grid grid-cols-2 gap-2 mb-3" onClick={(e) => e.stopPropagation()}>
                 <div className="bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                   <div className="flex items-center gap-2 mb-1">
                     <div className="w-7 h-7 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-base">
@@ -1026,7 +1107,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mb-2 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+              <div className="mb-2 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-xl">
                     ⚡
@@ -1038,7 +1119,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center text-xl">
                     🔥
@@ -1052,7 +1133,7 @@ export default function Home() {
             </>
           )}
 
-          <div className="space-y-2">
+          <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
             {user.isEvent ? (
               <button 
                 type="button"
@@ -1290,7 +1371,7 @@ export default function Home() {
         <div 
           className="flex-1 overflow-y-auto overflow-x-hidden p-4"
           style={{ 
-            paddingBottom: '140px',
+            paddingBottom: '160px',
             WebkitOverflowScrolling: 'touch'
           }}
         >
@@ -1314,9 +1395,20 @@ export default function Home() {
 
         <BunnyChat />
 
-        <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
-          <div className="p-2 overflow-x-auto scrollbar-hide">
-            <div className="flex gap-2" style={{minWidth: 'max-content'}}>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-gray-900 to-transparent backdrop-blur-xl shadow-2xl z-40 border-t border-purple-500/20">
+          {/* Welcome Message */}
+          <div className="px-4 pt-3 pb-2 text-center">
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-sm">
+              welcome to the bubble world 💜
+            </p>
+            <p className="text-purple-400 text-xs mt-1">
+              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+
+          {/* Category Navigation */}
+          <div className="px-3 pb-3 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-3" style={{minWidth: 'max-content'}}>
               {[
                 { id: 'nearby', image: '/images/nearby.jpg'},
                 { id: 'events', image: '/images/events.jpg'},
@@ -1336,27 +1428,28 @@ export default function Home() {
                       setSelectedCategory(category.id);
                     }
                   }}
-                  className={`p-2 rounded-full transition-all transform hover:scale-105 flex-shrink-0 ${
+                  className={`px-4 py-2 rounded-2xl transition-all transform hover:scale-105 flex-shrink-0 flex items-center gap-2 ${
                     category.isWallet
-                      ? 'bg-gray-50 text-gray-600 hover:bg-pink-50'
+                      ? 'bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 text-purple-300'
                       : selectedCategory === category.id
-                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-110'
-                      : 'bg-gray-50 text-gray-600 hover:bg-pink-50'
+                      ? 'bg-gradient-to-r from-pink-500 to-purple-500 shadow-lg shadow-pink-500/50 scale-105 border border-pink-400'
+                      : 'bg-gray-900/50 border border-purple-500/20 hover:border-purple-500/40'
                   }`}
                 >
                   {category.isWallet ? (
-                    <div className="w-9 h-9 flex items-center justify-center">
-                      <span className="text-2xl">{category.icon}</span>
-                    </div>
+                    <span className="text-xl">{category.icon}</span>
                   ) : (
-                    <div className="w-9 h-9 flex items-center justify-center">
-                      <img 
-                        src={category.image}
-                        alt={category.id}
-                        className="w-full h-full object-cover rounded-full"
-                      />
-                    </div>
+                    <img 
+                      src={category.image}
+                      alt={category.id}
+                      className="w-8 h-8 object-cover rounded-full border border-purple-500/30"
+                    />
                   )}
+                  <span className={`text-xs font-medium ${
+                    selectedCategory === category.id ? 'text-white' : 'text-purple-300'
+                  }`}>
+                    {category.id}
+                  </span>
                 </button>
               ))}
             </div>
