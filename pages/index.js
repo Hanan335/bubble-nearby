@@ -394,7 +394,7 @@ export default function Home() {
         year: null,
         major: null,
         occupation: "Software Engineer",
-        photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
+        photos: ["/images/users/john/1.jpg", "/images/users/john/2.jpg"],
         location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
