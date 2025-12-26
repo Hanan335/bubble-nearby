@@ -1137,98 +1137,6 @@ export default function Home() {
                   </div>
                 </div>
               </button>
-
-              {/* Daily Activities Bar - Just bubbles like bottom nav */}
-              <div className="mb-3">
-                <p className="text-purple-400 text-xs font-semibold mb-2 px-1">available today</p>
-                <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
-                  {/* Don't show same category they're already in */}
-                  {selectedCategory !== 'social' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="flex-shrink-0 p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-95"
-                    >
-                      <img 
-                        src="/images/coffee.jpg"
-                        alt="coffee"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {selectedCategory !== 'rides' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="flex-shrink-0 p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-95"
-                    >
-                      <img 
-                        src="/images/car.jpg"
-                        alt="ride"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {selectedCategory !== 'study' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="flex-shrink-0 p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-95"
-                    >
-                      <img 
-                        src="/images/studying.jpg"
-                        alt="study"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {selectedCategory !== 'sports' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="flex-shrink-0 p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-95"
-                    >
-                      <img 
-                        src="/images/playing.jpg"
-                        alt="sports"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {selectedCategory !== 'events' && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="flex-shrink-0 p-2 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-full border border-purple-500/20 hover:border-purple-500/40 transition-all active:scale-95"
-                    >
-                      <img 
-                        src="/images/events.jpg"
-                        alt="event"
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    </button>
-                  )}
-                </div>
-              </div>
             </>
           )}
 
@@ -1333,6 +1241,80 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
+              {/* Available Today - At bottom with stats */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {/* First activity bubble - always "available today" */}
+                {(() => {
+                  const activities = [
+                    { category: 'social', img: '/images/coffee.jpg', alt: 'coffee' },
+                    { category: 'rides', img: '/images/car.jpg', alt: 'ride' },
+                    { category: 'study', img: '/images/studying.jpg', alt: 'study' },
+                    { category: 'sports', img: '/images/playing.jpg', alt: 'sports' },
+                    { category: 'events', img: '/images/events.jpg', alt: 'event' }
+                  ];
+                  
+                  const firstActivity = activities.find(a => a.category !== selectedCategory);
+                  
+                  return firstActivity && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        saveScrollPosition();
+                        setShowChat(true);
+                      }}
+                      className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-7 h-7 rounded-lg overflow-hidden">
+                          <img 
+                            src={firstActivity.img}
+                            alt={firstActivity.alt}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <p className="text-white font-semibold text-xs">available today</p>
+                      </div>
+                    </button>
+                  );
+                })()}
+
+                {/* Second activity bubble - always "activities left" */}
+                {(() => {
+                  const activities = [
+                    { category: 'social', img: '/images/coffee.jpg', alt: 'coffee' },
+                    { category: 'rides', img: '/images/car.jpg', alt: 'ride' },
+                    { category: 'study', img: '/images/studying.jpg', alt: 'study' },
+                    { category: 'sports', img: '/images/playing.jpg', alt: 'sports' },
+                    { category: 'events', img: '/images/events.jpg', alt: 'event' }
+                  ];
+                  
+                  const filtered = activities.filter(a => a.category !== selectedCategory);
+                  const secondActivity = filtered[1];
+                  
+                  return secondActivity && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        saveScrollPosition();
+                        setShowChat(true);
+                      }}
+                      className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-7 h-7 rounded-lg overflow-hidden">
+                          <img 
+                            src={secondActivity.img}
+                            alt={secondActivity.alt}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <p className="text-white font-semibold text-xs">activities left</p>
+                      </div>
+                    </button>
+                  );
+                })()}
+              </div>
             </>
           )}
 
@@ -1409,32 +1391,35 @@ export default function Home() {
   };
 
   const AvatarBuilder = () => {
-    const [selectedActivities, setSelectedActivities] = useState(['🎵', '☕', '📚']);
-    const [avatarEmoji, setAvatarEmoji] = useState('😊');
+    const [profilePhoto, setProfilePhoto] = useState(null);
+    const [selectedBubbles, setSelectedBubbles] = useState([]);
     
-    const activities = [
-      { emoji: '🎵', name: 'music lover' },
-      { emoji: '☕', name: 'coffee addict' },
-      { emoji: '📚', name: 'study buddy' },
-      { emoji: '🚗', name: 'have rides' },
-      { emoji: '🏃', name: 'gym rat' },
-      { emoji: '🎮', name: 'gamer' },
-      { emoji: '🎨', name: 'creative' },
-      { emoji: '🍕', name: 'foodie' },
-      { emoji: '✈️', name: 'traveler' },
-      { emoji: '📷', name: 'photographer' },
-      { emoji: '🎬', name: 'movie buff' },
-      { emoji: '🌿', name: 'nature lover' }
+    const allBubbles = [
+      { id: 'coffee', name: 'Coffee', desc: 'grab coffee & chat', img: '/images/coffee.jpg' },
+      { id: 'rides', name: 'Rides', desc: 'share rides to campus', img: '/images/car.jpg' },
+      { id: 'study', name: 'Study', desc: 'library study sessions', img: '/images/studying.jpg' },
+      { id: 'sports', name: 'Sports', desc: 'play sports together', img: '/images/playing.jpg' },
+      { id: 'events', name: 'Events', desc: 'attend events & parties', img: '/images/events.jpg' },
+      { id: 'nearby', name: 'Nearby', desc: 'hangout around campus', img: '/images/nearby.jpg' }
     ];
 
-    const avatarOptions = ['😊', '😎', '🤓', '😴', '🥳', '😇', '🤪', '🥰', '😌', '🤗'];
+    const exampleProfiles = [
+      { name: 'Chill Vibes', bubbles: ['coffee', 'nearby'], photo: '/images/users/Sarah/1.jpg' },
+      { name: 'Active Student', bubbles: ['study', 'sports'], photo: '/images/users/Mike/1.jpg' },
+      { name: 'Social Butterfly', bubbles: ['events', 'coffee'], photo: '/images/users/Mara/1.jpg' }
+    ];
 
-    const toggleActivity = (emoji) => {
-      if (selectedActivities.includes(emoji)) {
-        setSelectedActivities(selectedActivities.filter(e => e !== emoji));
-      } else {
-        setSelectedActivities([...selectedActivities, emoji]);
+    const toggleBubble = (id) => {
+      if (selectedBubbles.includes(id)) {
+        setSelectedBubbles(selectedBubbles.filter(b => b !== id));
+      } else if (selectedBubbles.length < 2) {
+        setSelectedBubbles([...selectedBubbles, id]);
       }
+    };
+
+    const loadExample = (example) => {
+      setSelectedBubbles(example.bubbles);
+      setProfilePhoto(example.photo);
     };
 
     return (
@@ -1447,72 +1432,130 @@ export default function Home() {
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-white font-bold text-lg">My Avatar</h2>
+            <h2 className="text-white font-bold text-lg">Build Your Bubble</h2>
             <div className="w-10"></div>
           </div>
         </div>
 
-        <div className="p-4 space-y-4">
-          {/* Avatar Preview */}
-          <div className="bg-gradient-to-br from-purple-900/60 via-gray-900/60 to-purple-950/60 rounded-3xl p-6 border border-purple-500/30 backdrop-blur-xl text-center">
-            <p className="text-purple-300 text-xs font-semibold mb-3">your bubble vibe</p>
-            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-7xl mb-4 shadow-2xl shadow-purple-500/50 animate-pulse">
-              {avatarEmoji}
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {selectedActivities.map((emoji, idx) => (
-                <span key={idx} className="text-2xl bg-purple-500/20 rounded-full px-3 py-1 border border-purple-500/30">
-                  {emoji}
-                </span>
-              ))}
+        <div className="px-4 pt-3 pb-6">
+          {/* Your Avatar Section */}
+          <div className="mb-4">
+            <p className="text-purple-400 text-xs font-semibold mb-2">your avatar</p>
+            <div className="relative h-64 bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 rounded-2xl overflow-hidden border border-purple-500/20">
+              {profilePhoto ? (
+                <img src={profilePhoto} alt="avatar" className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-20 h-20 mx-auto mb-3 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-5xl">
+                      📸
+                    </div>
+                    <p className="text-purple-300 text-sm font-semibold">Your Photo</p>
+                    <p className="text-purple-400 text-xs mt-1">tap to upload</p>
+                  </div>
+                </div>
+              )}
+              
+              <button className="absolute bottom-3 right-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl font-semibold text-xs shadow-lg">
+                Edit Photo
+              </button>
             </div>
           </div>
 
-          {/* Avatar Emoji Selection */}
-          <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl p-4 border border-purple-500/20">
-            <p className="text-white font-semibold mb-3 text-sm">choose your mood</p>
-            <div className="grid grid-cols-5 gap-2">
-              {avatarOptions.map((emoji) => (
+          {/* Choose Bubbles */}
+          <div className="mb-4">
+            <p className="text-purple-400 text-xs font-semibold mb-2">choose your bubbles (max 2)</p>
+            <div className="space-y-2">
+              {allBubbles.map((bubble) => (
                 <button
-                  key={emoji}
-                  onClick={() => setAvatarEmoji(emoji)}
-                  className={`text-4xl p-3 rounded-xl transition-all ${
-                    avatarEmoji === emoji
-                      ? 'bg-gradient-to-br from-pink-500 to-purple-600 scale-110 shadow-lg'
-                      : 'bg-purple-950/50 hover:bg-purple-900/50 border border-purple-500/20'
+                  key={bubble.id}
+                  onClick={() => toggleBubble(bubble.id)}
+                  className={`w-full p-3 rounded-xl transition-all flex items-center gap-3 ${
+                    selectedBubbles.includes(bubble.id)
+                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-600/30 border-2 border-pink-500'
+                      : 'bg-purple-950/40 border border-purple-500/20'
                   }`}
                 >
-                  {emoji}
+                  <img 
+                    src={bubble.img}
+                    alt={bubble.name}
+                    className="w-12 h-12 rounded-lg object-cover"
+                  />
+                  <div className="flex-1 text-left">
+                    <p className="text-white font-semibold text-sm">{bubble.name}</p>
+                    <p className="text-purple-300 text-xs">{bubble.desc}</p>
+                  </div>
+                  {selectedBubbles.includes(bubble.id) && (
+                    <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Activities Selection */}
-          <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl p-4 border border-purple-500/20">
-            <p className="text-white font-semibold mb-2 text-sm">your daily bubbles</p>
-            <p className="text-purple-300 text-xs mb-3">select activities you want to share</p>
-            <div className="grid grid-cols-2 gap-2">
-              {activities.map((activity) => (
+          {/* Example Profiles */}
+          <div className="mb-4">
+            <p className="text-purple-400 text-xs font-semibold mb-2">or choose from examples</p>
+            <div className="grid grid-cols-3 gap-2">
+              {exampleProfiles.map((example, idx) => (
                 <button
-                  key={activity.emoji}
-                  onClick={() => toggleActivity(activity.emoji)}
-                  className={`p-3 rounded-xl transition-all flex items-center gap-2 ${
-                    selectedActivities.includes(activity.emoji)
-                      ? 'bg-gradient-to-br from-pink-500/50 to-purple-600/50 border-2 border-pink-500 scale-105 shadow-lg'
-                      : 'bg-purple-950/40 border border-purple-500/20 hover:border-purple-500/40'
-                  }`}
+                  key={idx}
+                  onClick={() => loadExample(example)}
+                  className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-xl p-2 border border-purple-500/20 hover:border-purple-500/40 transition-all"
                 >
-                  <span className="text-2xl">{activity.emoji}</span>
-                  <span className="text-white text-xs font-medium">{activity.name}</span>
+                  <img 
+                    src={example.photo}
+                    alt={example.name}
+                    className="w-full h-20 object-cover rounded-lg mb-2"
+                  />
+                  <p className="text-white text-xs font-semibold text-center">{example.name}</p>
+                  <div className="flex gap-1 justify-center mt-1">
+                    {example.bubbles.map((bubbleId, i) => {
+                      const bubble = allBubbles.find(b => b.id === bubbleId);
+                      return bubble && (
+                        <img 
+                          key={i}
+                          src={bubble.img}
+                          alt={bubble.name}
+                          className="w-4 h-4 rounded object-cover"
+                        />
+                      );
+                    })}
+                  </div>
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Preview */}
+          <div className="mb-4 bg-gradient-to-br from-purple-900/60 via-gray-900/60 to-purple-950/60 rounded-2xl p-4 border border-purple-500/30">
+            <p className="text-purple-300 text-xs font-semibold mb-3">preview</p>
+            {selectedBubbles.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2">
+                {selectedBubbles.map((bubbleId, idx) => {
+                  const bubble = allBubbles.find(b => b.id === bubbleId);
+                  return bubble && (
+                    <div key={idx} className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+                      <div className="flex items-center gap-2">
+                        <img src={bubble.img} alt={bubble.name} className="w-7 h-7 rounded-lg object-cover" />
+                        <p className="text-white font-semibold text-xs">
+                          {idx === 0 ? 'available today' : 'activities left'}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-purple-400 text-xs text-center py-4">select bubbles to see preview</p>
+            )}
           </div>
 
           {/* Save Button */}
           <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg border border-pink-400/30">
-            Save My Bubble Avatar ✨
+            Save My Bubble Profile ✨
           </button>
         </div>
       </div>
