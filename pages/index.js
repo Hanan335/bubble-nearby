@@ -89,10 +89,10 @@ const BunnyChat = () => {
       case 'breathe':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-500 hover:text-pink-500">
+            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
               ← back
             </button>
-            <div className="relative h-48 flex items-center justify-center bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+            <div className="relative h-40 flex items-center justify-center bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
               {isBreathing ? (
                 <>
                   <div className={`absolute transition-all duration-[4000ms] ease-in-out rounded-full 
@@ -100,15 +100,15 @@ const BunnyChat = () => {
                     ${breathCount % 2 === 0 ? 'scale-100 opacity-50' : 'scale-150 opacity-80'}`}
                     style={{ width: '100px', height: '100px' }}
                   />
-                  <div className="absolute text-gray-500 text-sm">
+                  <div className="absolute text-gray-700 text-sm font-medium">
                     {breathCount % 2 === 0 ? 'breathe in... 🧘‍♀️' : 'breathe out... 😌'}
                   </div>
                 </>
               ) : (
                 <button
                   onClick={handleBreathing}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-400 
-                    text-white text-sm hover:shadow-lg transition-all"
+                  className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 
+                    text-white text-sm font-semibold hover:shadow-lg transition-all"
                 >
                   start breathing ✨
                 </button>
@@ -120,14 +120,14 @@ const BunnyChat = () => {
       case 'bubbles':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-500 hover:text-pink-500">
+            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
               ← back
             </button>
             <div 
-              className="h-48 relative overflow-hidden bg-gradient-to-b from-purple-50 to-pink-50 rounded-xl cursor-pointer"
+              className="h-40 relative overflow-hidden bg-gradient-to-b from-purple-50 to-pink-50 rounded-xl cursor-pointer"
               onClick={handleBubbles}
             >
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+              <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-sm font-medium">
                 tap anywhere to pop anxiety bubbles ✨
               </div>
               
@@ -152,10 +152,10 @@ const BunnyChat = () => {
       case 'aurora':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-500 hover:text-pink-500">
+            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
               ← back
             </button>
-            <div className="h-48 relative bg-gray-900 rounded-xl overflow-hidden">
+            <div className="h-40 relative bg-gray-900 rounded-xl overflow-hidden">
               <button
                 onClick={() => setAuroraMode(prev => prev === 'wave' ? 'pulse' : 'wave')}
                 className="absolute top-2 right-2 px-3 py-1 rounded-full bg-white/10 text-white/70 
@@ -190,24 +190,24 @@ const BunnyChat = () => {
   };
 
   return (
-    <div className="absolute bottom-28 right-4 z-50">
+    <div className="absolute bottom-20 right-4 z-40">
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-72 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl">
-          <div className="bg-gradient-to-r from-pink-400 to-purple-400 p-3 rounded-t-2xl flex items-center justify-between">
+        <div className="absolute bottom-16 right-0 w-72 bg-white rounded-2xl shadow-xl border border-gray-200">
+          <div className="bg-gradient-to-r from-pink-500 to-purple-500 p-3 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-2">
               <img 
                 src="/images/bunny.png" 
                 alt="Bunny"
                 className="w-8 h-8 rounded-full"
               />
-              <span className="text-white">I am your Bunny 🩷❤️💜</span>
+              <span className="text-white font-semibold text-sm">I am your Bunny 🩷❤️💜</span>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white">
+            <button onClick={() => setIsOpen(false)} className="text-white/90 hover:text-white">
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="p-3 max-h-96 overflow-y-auto">
+          <div className="p-3 max-h-80 overflow-y-auto bg-white">
             {activeSection === 'main' ? (
               <div className="space-y-2">
                 {mainOptions.map((opt) => (
@@ -218,7 +218,7 @@ const BunnyChat = () => {
                       hover:from-pink-100 hover:to-purple-100 transition-all flex items-center gap-2"
                   >
                     <span className="text-xl">{opt.icon}</span>
-                    <span>{opt.text}</span>
+                    <span className="text-sm text-gray-800 font-medium">{opt.text}</span>
                   </button>
                 ))}
               </div>
@@ -228,7 +228,7 @@ const BunnyChat = () => {
               <div className="space-y-3">
                 <button 
                   onClick={() => setActiveSection('main')}
-                  className="text-sm text-gray-500 hover:text-pink-500"
+                  className="text-sm text-gray-700 hover:text-pink-600 font-medium"
                 >
                   ← back
                 </button>
@@ -239,7 +239,7 @@ const BunnyChat = () => {
                       key={idx}
                       onClick={() => handleSectionOption(opt)}
                       className="w-full p-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50
-                        hover:from-pink-100 hover:to-purple-100 transition-all text-left"
+                        hover:from-pink-100 hover:to-purple-100 transition-all text-left text-sm text-gray-800 font-medium"
                     >
                       {typeof opt === 'object' ? opt.text : opt}
                     </button>
@@ -249,15 +249,15 @@ const BunnyChat = () => {
             )}
           </div>
 
-          <div className="p-3 border-t">
+          <div className="p-3 border-t border-gray-200 bg-white rounded-b-2xl">
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="type something..."
-                className="flex-1 px-3 py-2 rounded-xl bg-gray-50 focus:bg-white 
-                  focus:ring-2 focus:ring-pink-400 transition-all text-sm"
+                className="flex-1 px-3 py-2 rounded-xl bg-gray-100 focus:bg-gray-50 text-gray-800
+                  focus:ring-2 focus:ring-pink-400 transition-all text-sm placeholder-gray-500"
               />
-              <button className="p-2 bg-gradient-to-r from-pink-400 to-purple-400 text-white 
+              <button className="p-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white 
                 rounded-xl hover:shadow-lg transition-all">
                 <Send className="h-5 w-5" />
               </button>
@@ -516,7 +516,7 @@ export default function Home() {
           </div>
         )}
 
-        <div className={`relative h-80 ${cardConnected ? 'bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100' : 'bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50'}`}>
+        <div className={`relative h-40 ${cardConnected ? 'bg-gradient-to-br from-pink-100 via-purple-100 to-pink-100' : 'bg-gradient-to-br from-gray-50 via-purple-50 to-gray-50'}`}>
           <div className="absolute left-4 top-1/2 -translate-y-1/2 space-y-2 z-10">
             <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-gray-300' : 'bg-red-500 animate-pulse'}`} />
             <div className={`w-2 h-2 rounded-full ${cardConnected ? 'bg-green-400 animate-pulse' : 'bg-gray-300'}`} />
@@ -577,55 +577,55 @@ export default function Home() {
             <div className="bg-white rounded-3xl overflow-hidden shadow-2xl">
               <div className="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 p-6 text-center relative">
                 <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white/10 to-transparent"></div>
-                <div className="w-24 h-24 bg-white rounded-full mx-auto mb-3 flex items-center justify-center text-5xl shadow-lg relative z-10 animate-bounce">
+                <div className="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center text-4xl shadow-lg relative z-10 animate-bounce">
                   🎫
                 </div>
-                <h2 className="text-white font-bold text-2xl mb-1 relative z-10">Your Ticket!</h2>
+                <h2 className="text-white font-bold text-xl mb-1 relative z-10">Your Ticket!</h2>
                 <p className="text-white/90 text-sm relative z-10">See you there! ✨</p>
               </div>
 
-              <div className="p-6 space-y-4">
-                <div className="text-center border-b border-dashed border-gray-300 pb-4">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{user.name}</h3>
-                  <p className="text-pink-500 italic text-sm leading-relaxed">"{user.mood}"</p>
+              <div className="p-4 space-y-3">
+                <div className="text-center border-b border-dashed border-gray-300 pb-3">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{user.name}</h3>
+                  <p className="text-pink-500 italic text-xs leading-relaxed">"{user.mood}"</p>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4 border border-pink-100">
-                    <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-3 border border-pink-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-xl shadow-md">
                       📅
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Date & Time</p>
-                      <p className="font-bold text-gray-800 text-base">{user.eventDate}</p>
+                      <p className="font-bold text-gray-800 text-sm">{user.eventDate}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 border border-purple-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-xl shadow-md">
                       📍
                     </div>
                     <div className="flex-1">
                       <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Location</p>
-                      <p className="font-bold text-gray-800 text-sm">{user.location}</p>
+                      <p className="font-bold text-gray-800 text-xs">{user.location}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-2xl shadow-md">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-3 border border-green-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-xl shadow-md">
                       💰
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 font-semibold uppercase tracking-wide">Price</p>
-                      <p className="font-bold text-gray-800 text-xl">{user.price}</p>
+                      <p className="font-bold text-gray-800 text-lg">{user.price}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-dashed border-gray-300">
-                  <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-dashed border-pink-200">
-                    <div className="bg-white p-4 rounded-xl mb-3 flex items-center justify-center shadow-inner">
-                      <svg width="140" height="140" viewBox="0 0 29 29">
+                <div className="pt-3 border-t border-dashed border-gray-300">
+                  <div className="bg-gradient-to-br from-pink-50 via-purple-50 to-pink-50 rounded-2xl p-4 border-2 border-dashed border-pink-200">
+                    <div className="bg-white p-3 rounded-xl mb-2 flex items-center justify-center shadow-inner">
+                      <svg width="120" height="120" viewBox="0 0 29 29">
                         <rect width="29" height="29" fill="white"/>
                         <path d="M1,1h7v7h-7z M9,1h1v1h1v1h-1v1h-2v-1h1z M11,1h2v1h1v2h-1v1h-1v-2h-1z M15,1h1v1h-1z M17,1h1v2h1v-1h2v1h-1v1h1v1h-2v-1h-1v1h-1v-1h-1v-1h1v-1h1z M21,1h7v7h-7z M2,2v5h5v-5z M22,2v5h5v-5z M3,3h3v3h-3z M23,3h3v3h-3z M9,5h1v1h-1z M11,5h2v1h1v1h-2v1h-1v-2h-1v-1h1z M15,5h1v1h-1z M19,5h1v1h-1z M10,6h1v1h-1z M1,9h1v2h1v-1h2v1h-1v1h-1v1h-1v-1h-1z M5,9h1v2h-1z M9,9h1v1h1v-1h2v2h-2v1h-1v-1h-1v1h-1v-2h1z M14,9h1v1h-1z M16,9h1v2h-1v1h-1v-3h1z M19,9h1v1h-1z M6,10h1v1h-1z M20,10h1v2h-1z M4,11h1v1h-1z M7,11h1v2h-1v1h-1v-1h-1v-2h1v1h1z M14,11h1v1h-1z M22,11h3v1h-2v1h-1z M26,11h2v1h-2z M5,12h1v1h-1z M10,12h1v1h-1z M18,12h1v1h-1z M1,13h1v1h1v-1h1v1h-1v1h-2z M13,13h1v1h-1z M21,13h1v2h-1z M25,13h1v3h-1v1h-1v-2h-1v-1h2z M4,14h1v1h-1z M9,14h1v1h-1z M19,14h1v1h-1z M27,14h1v1h-1z M11,15h1v2h-1z M13,15h3v1h-2v1h-1z M17,15h2v1h1v1h-3v1h-1v-3h1z M22,15h1v1h-1z M1,16h1v1h-1z M3,16h4v1h-1v1h-1v-1h-2z M8,16h2v1h1v1h-2v1h-2v-1h1z M20,16h1v1h-1z M23,16h1v1h-1z M26,16h2v1h-2z M13,17h1v1h-1z M21,17h1v2h-1z M1,18h2v1h-2z M4,18h2v1h1v2h-1v-1h-1v1h-1v-1h-1v-1h1z M14,18h1v1h1v1h-1v1h-1z M17,18h1v1h-1z M19,18h1v1h-1z M26,18h2v1h-2z M9,19h2v1h-2z M12,19h1v1h-1z M22,19h2v1h-1v1h-1z M1,20h1v1h-1z M7,20h1v1h1v1h-1v1h-2v-2h1z M16,20h1v1h-1z M18,20h1v1h-1z M25,20h2v1h-2z M2,21h1v2h2v-1h1v2h-1v1h-2v1h-1v-1h-1v-3h1z M10,21h1v1h-1z M12,21h2v2h-1v-1h-1z M15,21h1v1h1v1h-2z M20,21h1v1h-1z M24,21h1v2h2v2h-1v-1h-2v-1h1v-1h-1z M27,21h1v1h-1z M5,22h2v1h-1v1h-1z M17,22h1v1h-1z M19,22h2v1h-1v1h-1z M9,23h1v1h1v1h-1v1h-1v-2h-1v-1h1z M11,23h1v2h-1z M14,23h1v1h-1z M22,23h1v1h-1z M26,23h2v1h-1v1h-1z M4,24h1v1h-1z M15,24h2v1h-1v1h-1z M19,24h2v1h-2z M5,25h2v1h-2z M12,25h1v1h1v1h-2z M17,25h1v1h-1z M21,25h1v2h-1z M1,26h1v1h-1z M7,26h1v1h-1z M9,26h1v1h-1z M14,26h1v1h-1z M18,26h2v1h-2z M23,26h1v1h-1z M25,26h1v2h-1z M27,26h1v1h-1z M2,27h1v1h-1z M4,27h3v1h-3z M8,27h1v1h-1z M10,27h2v1h-2z M15,27h1v1h-1z M17,27h1v1h-1z M20,27h1v1h-1z M22,27h1v1h-1z M26,27h2v1h-2z" fill="black"/>
                         <path d="M1,1h7v7h-7z M2,2v5h5v-5z M3,3h3v3h-3z" fill="black"/>
@@ -634,9 +634,9 @@ export default function Home() {
                       </svg>
                     </div>
                     <div className="text-center">
-                      <p className="text-lg text-gray-800 font-mono font-bold mb-1">TICKET #{ticketNumber}</p>
+                      <p className="text-base text-gray-800 font-mono font-bold mb-1">TICKET #{ticketNumber}</p>
                       <p className="text-xs text-gray-500 mt-2 font-medium">Show QR code at entrance</p>
-                      <div className="mt-3 pt-3 border-t border-pink-200">
+                      <div className="mt-2 pt-2 border-t border-pink-200">
                         <p className="text-xs text-pink-600 font-semibold">Valid for event date only</p>
                       </div>
                     </div>
@@ -726,6 +726,11 @@ export default function Home() {
 
   const ProfileView = ({ user }) => {
     const scrollRef = useRef(null);
+    const touchStartX = useRef(0);
+    const touchEndX = useRef(0);
+    const touchStartY = useRef(0);
+    const touchEndY = useRef(0);
+    const [swipeOffset, setSwipeOffset] = useState(0);
     
     const getGenderEmoji = (gender) => {
       if (gender === 'boy') return '👨';
@@ -733,8 +738,65 @@ export default function Home() {
       return '🎭';
     };
 
+    const handleTouchStart = (e) => {
+      touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      touchEndX.current = e.touches[0].clientX;
+      touchEndY.current = e.touches[0].clientY;
+      
+      const diffX = touchEndX.current - touchStartX.current;
+      const diffY = touchEndY.current - touchStartY.current;
+      
+      // Only register horizontal swipe if it's more horizontal than vertical
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        setSwipeOffset(diffX);
+        // Prevent vertical scrolling when doing horizontal swipe
+        e.preventDefault();
+      }
+    };
+
+    const handleTouchEnd = () => {
+      const swipeDistanceX = touchEndX.current - touchStartX.current;
+      const swipeDistanceY = touchEndY.current - touchStartY.current;
+      
+      // Only close if horizontal swipe is dominant and more than 100px
+      if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY) && Math.abs(swipeDistanceX) > 100) {
+        setShowProfile(false);
+      }
+      
+      // Reset swipe offset
+      setSwipeOffset(0);
+      touchStartX.current = 0;
+      touchEndX.current = 0;
+      touchStartY.current = 0;
+      touchEndY.current = 0;
+    };
+
     return (
-      <div className="absolute inset-0 bg-black z-50 flex flex-col">
+      <div 
+        className="absolute inset-0 bg-black z-50 flex flex-col transition-transform"
+        style={{ 
+          transform: `translateX(${swipeOffset}px)`,
+          transition: swipeOffset === 0 ? 'transform 0.3s ease-out' : 'none',
+          willChange: 'transform',
+          contain: 'layout paint'
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Swipe indicator */}
+        {Math.abs(swipeOffset) > 20 && (
+          <div className={`absolute ${swipeOffset > 0 ? 'left-4' : 'right-4'} top-1/2 -translate-y-1/2 z-20 pointer-events-none`}>
+            <div className="bg-white/20 backdrop-blur-sm rounded-full p-3 text-white text-2xl">
+              {swipeOffset > 0 ? '→' : '←'}
+            </div>
+          </div>
+        )}
+
         <div className="sticky top-0 z-10 flex items-center justify-between p-3 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-xl border-b border-white/10">
           <button onClick={() => setShowProfile(false)} className="text-white">
             <X className="w-5 h-5" />
@@ -750,28 +812,28 @@ export default function Home() {
           className="flex-1 overflow-y-auto overscroll-contain" 
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-        <div className="px-4 pt-4 pb-6">
-          <div className="text-center mb-4">
-            <p className="text-white font-bold text-xl mb-1">{user.name}{user.age ? `, ${user.age}` : ''}</p>
-            {user.mood && <p className="text-pink-400 italic mb-1">"{user.mood}"</p>}
+        <div className="px-4 pt-3 pb-6">
+          <div className="text-center mb-3">
+            <p className="text-white font-bold text-lg mb-1">{user.name}{user.age ? `, ${user.age}` : ''}</p>
+            {user.mood && <p className="text-pink-400 italic text-sm mb-1">"{user.mood}"</p>}
             {user.year && user.major && (
-              <p className="text-gray-400 text-sm">{user.year} • {user.major}</p>
+              <p className="text-gray-400 text-xs">{user.year} • {user.major}</p>
             )}
             {user.occupation && (
-              <p className="text-gray-400 text-sm">{user.occupation}</p>
+              <p className="text-gray-400 text-xs">{user.occupation}</p>
             )}
-            <p className="text-gray-400 text-sm mt-1">📍 {user.location}</p>
+            <p className="text-gray-400 text-xs mt-1">📍 {user.location}</p>
           </div>
 
           {!user.isEvent && (
             <>
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl animate-pulse">
+                  <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
                     🎵
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-semibold text-sm">listening now</p>
+                    <p className="text-white font-semibold text-xs">listening now</p>
                     <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
                   </div>
                 </div>
@@ -779,7 +841,7 @@ export default function Home() {
             </>
           )}
 
-          <div className="relative mb-4">
+          <div className="relative mb-3">
             <div className="aspect-square rounded-2xl overflow-hidden border border-white/10">
               <img 
                 src={user.photos[currentPhotoIndex]} 
@@ -835,10 +897,10 @@ export default function Home() {
 
           {!user.isEvent && (
             <>
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="grid grid-cols-2 gap-2 mb-3">
                 <div className="bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-lg">
+                    <div className="w-7 h-7 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center text-base">
                       🏃
                     </div>
                     <p className="text-white font-semibold text-xs">ran today</p>
@@ -848,7 +910,7 @@ export default function Home() {
 
                 <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-lg">
+                    <div className="w-7 h-7 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center text-base">
                       ✨
                     </div>
                     <p className="text-white font-semibold text-xs">vibe</p>
@@ -857,25 +919,25 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+              <div className="mb-2 bg-gradient-to-br from-white/5 via-blue-500/10 to-cyan-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-2xl">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-xl">
                     ⚡
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-semibold text-sm">last active</p>
+                    <p className="text-white font-semibold text-xs">last active</p>
                     <p className="text-blue-400 text-xs">online now • {user.location}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-4 border border-white/10">
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-orange-500/10 to-amber-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center text-2xl">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl flex items-center justify-center text-xl">
                     🔥
                   </div>
                   <div className="flex-1">
-                    <p className="text-white font-semibold text-sm">streak</p>
+                    <p className="text-white font-semibold text-xs">streak</p>
                     <p className="text-orange-400 text-xs">12 days connecting • keep it going!</p>
                   </div>
                 </div>
@@ -955,50 +1017,50 @@ export default function Home() {
 
   const WalletView = () => (
     <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 z-[60] overflow-y-auto p-4">
-      <div className="flex items-center justify-between mb-6 pt-2">
+      <div className="flex items-center justify-between mb-4 pt-2">
         <button 
           onClick={() => setShowWallet(false)} 
           className="text-white/80 hover:text-white"
         >
           <X className="w-6 h-6" />
         </button>
-        <h2 className="text-white font-bold text-xl">My Wallet</h2>
+        <h2 className="text-white font-bold text-lg">My Wallet</h2>
         <div className="w-6"></div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Debit Card */}
-        <div className="relative h-52 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all">
+        <div className="relative h-44 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all">
           <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-purple-600 to-indigo-600"></div>
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
           </div>
           
-          <div className="relative h-full p-6 flex flex-col justify-between">
+          <div className="relative h-full p-5 flex flex-col justify-between">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-white/80 text-xs font-semibold mb-1">Current Balance</p>
-                <p className="text-white text-3xl font-bold">$847.50</p>
+                <p className="text-white text-2xl font-bold">$847.50</p>
               </div>
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                <span className="text-2xl">💳</span>
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <span className="text-xl">💳</span>
               </div>
             </div>
             
             <div>
-              <div className="mb-3">
+              <div className="mb-2">
                 <p className="text-white/60 text-xs mb-1">Card Number</p>
-                <p className="text-white font-mono text-lg tracking-wider">•••• •••• •••• 4829</p>
+                <p className="text-white font-mono text-base tracking-wider">•••• •••• •••• 4829</p>
               </div>
               <div className="flex justify-between items-end">
                 <div>
                   <p className="text-white/60 text-xs mb-1">Card Holder</p>
-                  <p className="text-white font-semibold text-sm">Alex Rodriguez</p>
+                  <p className="text-white font-semibold text-xs">Alex Rodriguez</p>
                 </div>
                 <div>
                   <p className="text-white/60 text-xs mb-1">Expires</p>
-                  <p className="text-white font-semibold text-sm">12/27</p>
+                  <p className="text-white font-semibold text-xs">12/27</p>
                 </div>
               </div>
             </div>
@@ -1006,70 +1068,70 @@ export default function Home() {
         </div>
 
         {/* Earnings Section */}
-        <div className="bg-white rounded-2xl p-5 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-gray-800 font-bold text-lg">This Month</h3>
+        <div className="bg-white rounded-2xl p-4 shadow-xl">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-gray-800 font-bold text-base">This Month</h3>
             <div className="bg-gradient-to-r from-green-400 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
               +$247.50
             </div>
           </div>
           
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🎓</span>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-lg">🎓</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-sm">Tutoring Sessions</p>
+                  <p className="text-gray-800 font-semibold text-xs">Tutoring Sessions</p>
                   <p className="text-gray-500 text-xs">12 sessions</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold">$120.00</p>
+              <p className="text-green-600 font-bold text-sm">$120.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🚗</span>
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center">
+                  <span className="text-lg">🚗</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-sm">Ride Shares</p>
+                  <p className="text-gray-800 font-semibold text-xs">Ride Shares</p>
                   <p className="text-gray-500 text-xs">8 trips</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold">$40.00</p>
+              <p className="text-green-600 font-bold text-sm">$40.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
-                  <span className="text-xl">🎫</span>
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center">
+                  <span className="text-lg">🎫</span>
                 </div>
                 <div>
-                  <p className="text-gray-800 font-semibold text-sm">Event Tickets</p>
+                  <p className="text-gray-800 font-semibold text-xs">Event Tickets</p>
                   <p className="text-gray-500 text-xs">15 sold</p>
                 </div>
               </div>
-              <p className="text-green-600 font-bold">$87.50</p>
+              <p className="text-green-600 font-bold text-sm">$87.50</p>
             </div>
           </div>
         </div>
 
         {/* Potential Earnings */}
-        <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-5 shadow-xl text-white">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-              <span className="text-2xl">🚀</span>
+        <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-4 shadow-xl text-white">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <span className="text-xl">🚀</span>
             </div>
-            <h3 className="font-bold text-lg">Unlock More Earnings</h3>
+            <h3 className="font-bold text-base">Unlock More Earnings</h3>
           </div>
           
-          <p className="text-white/90 text-sm mb-4 leading-relaxed">
+          <p className="text-white/90 text-xs mb-3 leading-relaxed">
             Complete 5 more sessions this week to earn a <span className="font-bold">$50 bonus!</span>
           </p>
           
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-3">
             <div className="flex items-center gap-2">
               <div className="flex-1 bg-white/20 rounded-full h-2 overflow-hidden">
                 <div className="bg-white h-full rounded-full" style={{width: '60%'}}></div>
@@ -1078,10 +1140,10 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 space-y-2">
-            <div className="flex items-center justify-between text-sm">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 space-y-1 mb-3">
+            <div className="flex items-center justify-between text-xs">
               <span className="text-white/80">Potential this week:</span>
-              <span className="font-bold text-lg">+$185</span>
+              <span className="font-bold text-base">+$185</span>
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-white/60">Average per session:</span>
@@ -1089,7 +1151,7 @@ export default function Home() {
             </div>
           </div>
 
-          <button className="w-full mt-4 bg-white text-purple-600 py-3 rounded-xl font-bold hover:bg-purple-50 transition-all shadow-lg">
+          <button className="w-full bg-white text-purple-600 py-2 rounded-xl font-bold hover:bg-purple-50 transition-all shadow-lg text-sm">
             Tap to Pay 💳
           </button>
         </div>
@@ -1099,7 +1161,7 @@ export default function Home() {
 
   return (
     <main className="h-screen w-full flex justify-center bg-gray-100">
-      <div className="relative w-full max-w-[390px] bg-white overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-[390px] h-screen bg-white overflow-hidden flex flex-col">
         <style jsx global>{`
           .scrollbar-hide::-webkit-scrollbar {
             display: none;
@@ -1110,7 +1172,7 @@ export default function Home() {
           }
         `}</style>
 
-        <div className="flex-1 overflow-y-auto p-4 pb-24">
+        <div className="flex-1 overflow-y-auto p-4 pb-28">
           {selectedCategory && (
             <div className="space-y-3">
               {profiles[selectedCategory]?.map((profile) => (
@@ -1132,7 +1194,7 @@ export default function Home() {
         <BunnyChat />
 
         <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white rounded-t-3xl shadow-lg z-40">
-          <div className="p-3 overflow-x-auto scrollbar-hide">
+          <div className="p-2 overflow-x-auto scrollbar-hide">
             <div className="flex gap-2" style={{minWidth: 'max-content'}}>
               {[
                 { id: 'nearby', image: '/images/nearby.jpg'},
