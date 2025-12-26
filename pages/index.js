@@ -896,8 +896,20 @@ export default function Home() {
     );
   };
 
-  const ChatView = ({ user }) => (
-    <div className="absolute inset-0 bg-white z-[60] flex flex-col">
+  const ChatView = ({ user }) => {
+    // Add suggested song message when chat opens from listening now
+    useEffect(() => {
+      if (chatMessages.length === 0) {
+        setChatMessages([{
+          text: "Hey! I saw you're listening to indie/bedroom pop. Have you heard 'Good Luck, Babe!' by Chappell Roan? It's giving those vibes! 🎵✨",
+          sender: 'user',
+          time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        }]);
+      }
+    }, []);
+
+    return (
+      <div className="absolute inset-0 bg-white z-[60] flex flex-col">
       <div className="bg-gradient-to-r from-pink-400 to-purple-400 p-3 flex items-center gap-3">
         <button onClick={() => setShowChat(false)} className="text-white">
           <X className="w-5 h-5" />
@@ -969,6 +981,7 @@ export default function Home() {
       </div>
     </div>
   );
+};
 
   const ProfileView = ({ user }) => {
     const scrollRef = useRef(null);
@@ -1048,6 +1061,10 @@ export default function Home() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onClick={(e) => {
+          // Prevent any click from closing - only swipe or X button
+          e.stopPropagation();
+        }}
       >
         {/* Swipe indicator */}
         {Math.abs(swipeOffset) > 20 && (
@@ -1082,7 +1099,7 @@ export default function Home() {
           className="flex-1 overflow-y-auto overscroll-contain" 
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-        <div className="px-4 pt-3 pb-6" onClick={(e) => e.stopPropagation()}>
+        <div className="px-4 pt-3 pb-6">
           <div className="text-center mb-3">
             <p className="text-white font-bold text-lg mb-1">{user.name}{user.age ? `, ${user.age}` : ''}</p>
             {user.mood && <p className="text-pink-400 italic text-sm mb-1">"{user.mood}"</p>}
@@ -1100,12 +1117,10 @@ export default function Home() {
               <button 
                 onClick={(e) => {
                   e.stopPropagation();
-                  // Open Bunny chat with throw song pre-selected
-                  clearBottomNav();
-                  setShowProfile(false);
-                  // This would trigger Bunny chat in real implementation
+                  saveScrollPosition();
+                  setShowChat(true);
                 }}
-                className="w-full mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-pink-500/30 transition-all active:scale-95"
+                className="w-full mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-pink-500/20 hover:border-pink-500/40 transition-all active:scale-98"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
@@ -1115,8 +1130,9 @@ export default function Home() {
                     <p className="text-white font-semibold text-xs">listening now</p>
                     <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
                   </div>
-                  <div className="text-purple-400 text-xs">
-                    throw a vibe →
+                  <div className="flex flex-col items-end">
+                    <p className="text-purple-400 text-xs font-semibold">suggest song</p>
+                    <p className="text-purple-500 text-xs">→ chat</p>
                   </div>
                 </div>
               </button>
@@ -1316,36 +1332,36 @@ export default function Home() {
 
       <div className="p-4 space-y-3">
         {/* Debit Card */}
-        <div className="relative h-44 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all border border-purple-500/20">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700"></div>
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
+        <div className="relative h-44 rounded-3xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all border border-purple-500/30">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-gray-900 to-black"></div>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500 rounded-full -translate-y-20 translate-x-20 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500 rounded-full translate-y-16 -translate-x-16 blur-3xl"></div>
           </div>
           
           <div className="relative h-full p-5 flex flex-col justify-between">
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-white/80 text-xs font-semibold mb-1">Current Balance</p>
+                <p className="text-purple-300 text-xs font-semibold mb-1">Current Balance</p>
                 <p className="text-white text-2xl font-bold">$847.50</p>
               </div>
-              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-purple-500/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-purple-500/30">
                 <span className="text-xl">💳</span>
               </div>
             </div>
             
             <div>
               <div className="mb-2">
-                <p className="text-white/60 text-xs mb-1">Card Number</p>
+                <p className="text-purple-400 text-xs mb-1">Card Number</p>
                 <p className="text-white font-mono text-base tracking-wider">•••• •••• •••• 4829</p>
               </div>
               <div className="flex justify-between items-end">
                 <div>
-                  <p className="text-white/60 text-xs mb-1">Card Holder</p>
+                  <p className="text-purple-400 text-xs mb-1">Card Holder</p>
                   <p className="text-white font-semibold text-xs">Alex Rodriguez</p>
                 </div>
                 <div>
-                  <p className="text-white/60 text-xs mb-1">Expires</p>
+                  <p className="text-purple-400 text-xs mb-1">Expires</p>
                   <p className="text-white font-semibold text-xs">12/27</p>
                 </div>
               </div>
@@ -1357,15 +1373,15 @@ export default function Home() {
         <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl p-4 shadow-xl border border-purple-500/20">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-white font-bold text-base">This Month</h3>
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+            <div className="bg-gradient-to-r from-green-600/80 to-emerald-600/80 text-white px-3 py-1 rounded-full text-xs font-bold border border-green-500/30">
               +$247.50
             </div>
           </div>
           
           <div className="space-y-2">
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-950/40 to-gray-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-purple-500/50 to-pink-500/50 rounded-full flex items-center justify-center border border-purple-500/30">
                   <span className="text-lg">🎓</span>
                 </div>
                 <div>
@@ -1376,9 +1392,9 @@ export default function Home() {
               <p className="text-green-400 font-bold text-sm">$120.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-950/40 to-gray-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-500/50 to-cyan-500/50 rounded-full flex items-center justify-center border border-blue-500/30">
                   <span className="text-lg">🚗</span>
                 </div>
                 <div>
@@ -1389,9 +1405,9 @@ export default function Home() {
               <p className="text-green-400 font-bold text-sm">$40.00</p>
             </div>
 
-            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-xl border border-purple-500/20">
+            <div className="flex items-center justify-between p-2 bg-gradient-to-r from-purple-950/40 to-gray-900/40 rounded-xl border border-purple-500/20">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center">
+                <div className="w-9 h-9 bg-gradient-to-br from-orange-500/50 to-amber-500/50 rounded-full flex items-center justify-center border border-orange-500/30">
                   <span className="text-lg">🎫</span>
                 </div>
                 <div>
@@ -1405,39 +1421,39 @@ export default function Home() {
         </div>
 
         {/* Potential Earnings */}
-        <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-2xl p-4 shadow-xl text-white border border-purple-400/30">
+        <div className="bg-gradient-to-br from-purple-900/60 via-gray-900/60 to-purple-950/60 rounded-2xl p-4 shadow-xl text-white border border-purple-500/30 backdrop-blur-xl">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <div className="w-9 h-9 bg-purple-500/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-purple-500/30">
               <span className="text-xl">🚀</span>
             </div>
             <h3 className="font-bold text-base">Unlock More Earnings</h3>
           </div>
           
-          <p className="text-white/90 text-xs mb-3 leading-relaxed">
-            Complete 5 more sessions this week to earn a <span className="font-bold">$50 bonus!</span>
+          <p className="text-purple-200 text-xs mb-3 leading-relaxed">
+            Complete 5 more sessions this week to earn a <span className="font-bold text-white">$50 bonus!</span>
           </p>
           
           <div className="space-y-2 mb-3">
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-white/20 rounded-full h-2 overflow-hidden">
-                <div className="bg-white h-full rounded-full" style={{width: '60%'}}></div>
+              <div className="flex-1 bg-purple-500/20 rounded-full h-2 overflow-hidden border border-purple-500/30">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full" style={{width: '60%'}}></div>
               </div>
               <span className="text-xs font-semibold">3/5</span>
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-2 space-y-1 mb-3">
+          <div className="bg-purple-950/50 backdrop-blur-sm rounded-xl p-2 space-y-1 mb-3 border border-purple-500/20">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white/80">Potential this week:</span>
-              <span className="font-bold text-base">+$185</span>
+              <span className="text-purple-300">Potential this week:</span>
+              <span className="font-bold text-base text-white">+$185</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white/60">Average per session:</span>
-              <span className="font-semibold">$12.50</span>
+              <span className="text-purple-400">Average per session:</span>
+              <span className="font-semibold text-purple-200">$12.50</span>
             </div>
           </div>
 
-          <button className="w-full bg-white text-purple-600 py-2 rounded-xl font-bold hover:bg-purple-50 transition-all shadow-lg text-sm">
+          <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 rounded-xl font-bold hover:from-purple-500 hover:to-pink-500 transition-all shadow-lg text-sm border border-purple-400/30">
             Tap to Pay 💳
           </button>
         </div>
@@ -1480,11 +1496,12 @@ export default function Home() {
           )}
 
           {!selectedCategory && (
-            <div className="flex items-center justify-center h-full">
+            <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-white via-purple-50 to-pink-50 z-0">
+              <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+              </div>
               <div className="relative z-10 text-center px-6">
-                <div className="absolute inset-0 -z-10">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-purple-500/20 blur-3xl animate-pulse"></div>
-                </div>
                 <p className="text-6xl mb-4 animate-bounce">💜</p>
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 font-bold text-2xl mb-3">
                   welcome to the bubble world
