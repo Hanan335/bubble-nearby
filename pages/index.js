@@ -1242,10 +1242,11 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Available Today - At bottom with stats */}
+              {/* Available Today - At bottom with stats - NO nearby (it's default) */}
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {/* First activity bubble - always "available today" */}
                 {(() => {
+                  // nearby is NOT in this list - it's default/always on
                   const activities = [
                     { category: 'social', img: '/images/coffee.jpg', alt: 'coffee' },
                     { category: 'rides', img: '/images/car.jpg', alt: 'ride' },
@@ -1394,19 +1395,13 @@ export default function Home() {
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [selectedBubbles, setSelectedBubbles] = useState([]);
     
+    // No nearby - it's default and always on
     const allBubbles = [
       { id: 'coffee', name: 'Coffee', desc: 'grab coffee & chat', img: '/images/coffee.jpg' },
       { id: 'rides', name: 'Rides', desc: 'share rides to campus', img: '/images/car.jpg' },
       { id: 'study', name: 'Study', desc: 'library study sessions', img: '/images/studying.jpg' },
       { id: 'sports', name: 'Sports', desc: 'play sports together', img: '/images/playing.jpg' },
-      { id: 'events', name: 'Events', desc: 'attend events & parties', img: '/images/events.jpg' },
-      { id: 'nearby', name: 'Nearby', desc: 'hangout around campus', img: '/images/nearby.jpg' }
-    ];
-
-    const exampleProfiles = [
-      { name: 'Chill Vibes', bubbles: ['coffee', 'nearby'], photo: '/images/users/Sarah/1.jpg' },
-      { name: 'Active Student', bubbles: ['study', 'sports'], photo: '/images/users/Mike/1.jpg' },
-      { name: 'Social Butterfly', bubbles: ['events', 'coffee'], photo: '/images/users/Mara/1.jpg' }
+      { id: 'events', name: 'Events', desc: 'attend events & parties', img: '/images/events.jpg' }
     ];
 
     const toggleBubble = (id) => {
@@ -1415,11 +1410,6 @@ export default function Home() {
       } else if (selectedBubbles.length < 2) {
         setSelectedBubbles([...selectedBubbles, id]);
       }
-    };
-
-    const loadExample = (example) => {
-      setSelectedBubbles(example.bubbles);
-      setProfilePhoto(example.photo);
     };
 
     return (
@@ -1438,92 +1428,54 @@ export default function Home() {
         </div>
 
         <div className="px-4 pt-3 pb-6">
-          {/* Your Avatar Section */}
-          <div className="mb-4">
-            <p className="text-purple-400 text-xs font-semibold mb-2">your avatar</p>
-            <div className="relative h-64 bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 rounded-2xl overflow-hidden border border-purple-500/20">
+          {/* Small Avatar Photo */}
+          <div className="mb-4 text-center">
+            <div className="w-32 h-32 mx-auto mb-3 rounded-full overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10">
               {profilePhoto ? (
                 <img src={profilePhoto} alt="avatar" className="w-full h-full object-cover" />
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-20 h-20 mx-auto mb-3 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-5xl">
-                      📸
-                    </div>
-                    <p className="text-purple-300 text-sm font-semibold">Your Photo</p>
-                    <p className="text-purple-400 text-xs mt-1">tap to upload</p>
-                  </div>
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-5xl">📸</span>
                 </div>
               )}
-              
-              <button className="absolute bottom-3 right-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl font-semibold text-xs shadow-lg">
-                Edit Photo
-              </button>
             </div>
+            <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg">
+              Edit Photo
+            </button>
           </div>
 
-          {/* Choose Bubbles */}
+          {/* Scrollable Bubble Bar */}
           <div className="mb-4">
-            <p className="text-purple-400 text-xs font-semibold mb-2">choose your bubbles (max 2)</p>
-            <div className="space-y-2">
+            <p className="text-purple-400 text-xs font-semibold mb-3">choose your bubbles (max 2)</p>
+            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-3">
               {allBubbles.map((bubble) => (
                 <button
                   key={bubble.id}
                   onClick={() => toggleBubble(bubble.id)}
-                  className={`w-full p-3 rounded-xl transition-all flex items-center gap-3 ${
-                    selectedBubbles.includes(bubble.id)
-                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-600/30 border-2 border-pink-500'
-                      : 'bg-purple-950/40 border border-purple-500/20'
+                  className={`flex-shrink-0 transition-all ${
+                    selectedBubbles.includes(bubble.id) ? 'scale-110' : ''
                   }`}
                 >
-                  <img 
-                    src={bubble.img}
-                    alt={bubble.name}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div className="flex-1 text-left">
-                    <p className="text-white font-semibold text-sm">{bubble.name}</p>
-                    <p className="text-purple-300 text-xs">{bubble.desc}</p>
+                  <div className={`relative w-20 h-20 rounded-full overflow-hidden border-2 ${
+                    selectedBubbles.includes(bubble.id) 
+                      ? 'border-pink-500 shadow-lg shadow-pink-500/50' 
+                      : 'border-purple-500/30'
+                  }`}>
+                    <img 
+                      src={bubble.img}
+                      alt={bubble.name}
+                      className="w-full h-full object-cover"
+                    />
+                    {selectedBubbles.includes(bubble.id) && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/40 to-purple-600/40 flex items-center justify-center">
+                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                          <span className="text-pink-600 text-lg">✓</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {selectedBubbles.includes(bubble.id) && (
-                    <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Example Profiles */}
-          <div className="mb-4">
-            <p className="text-purple-400 text-xs font-semibold mb-2">or choose from examples</p>
-            <div className="grid grid-cols-3 gap-2">
-              {exampleProfiles.map((example, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => loadExample(example)}
-                  className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-xl p-2 border border-purple-500/20 hover:border-purple-500/40 transition-all"
-                >
-                  <img 
-                    src={example.photo}
-                    alt={example.name}
-                    className="w-full h-20 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-white text-xs font-semibold text-center">{example.name}</p>
-                  <div className="flex gap-1 justify-center mt-1">
-                    {example.bubbles.map((bubbleId, i) => {
-                      const bubble = allBubbles.find(b => b.id === bubbleId);
-                      return bubble && (
-                        <img 
-                          key={i}
-                          src={bubble.img}
-                          alt={bubble.name}
-                          className="w-4 h-4 rounded object-cover"
-                        />
-                      );
-                    })}
-                  </div>
+                  <p className="text-white text-xs font-semibold text-center mt-2">{bubble.name}</p>
+                  <p className="text-purple-400 text-xs text-center">{bubble.desc}</p>
                 </button>
               ))}
             </div>
