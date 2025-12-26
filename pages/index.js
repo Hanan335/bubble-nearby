@@ -190,7 +190,7 @@ const BunnyChat = () => {
   };
 
   return (
-    <div className="absolute bottom-20 right-4 z-40">
+    <div className="absolute bottom-[80px] right-4 z-50">
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-72 bg-white rounded-2xl shadow-xl border border-gray-200">
           <div className="bg-gradient-to-r from-pink-500 to-purple-500 p-3 rounded-t-2xl flex items-center justify-between">
@@ -1160,9 +1160,15 @@ export default function Home() {
   );
 
   return (
-    <main className="h-screen w-full flex justify-center bg-gray-100">
-      <div className="relative w-full max-w-[390px] h-screen bg-white overflow-hidden flex flex-col">
+    <main className="fixed inset-0 w-full flex justify-center bg-gray-100">
+      <div className="relative w-full max-w-[390px] h-full bg-white flex flex-col">
         <style jsx global>{`
+          body {
+            position: fixed;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+          }
           .scrollbar-hide::-webkit-scrollbar {
             display: none;
           }
@@ -1172,7 +1178,13 @@ export default function Home() {
           }
         `}</style>
 
-        <div className="flex-1 overflow-y-auto p-4 pb-28">
+        <div 
+          className="flex-1 overflow-y-auto overflow-x-hidden p-4"
+          style={{ 
+            paddingBottom: '140px',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
           {selectedCategory && (
             <div className="space-y-3">
               {profiles[selectedCategory]?.map((profile) => (
@@ -1193,7 +1205,7 @@ export default function Home() {
 
         <BunnyChat />
 
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] bg-white rounded-t-3xl shadow-lg z-40">
+        <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
           <div className="p-2 overflow-x-auto scrollbar-hide">
             <div className="flex gap-2" style={{minWidth: 'max-content'}}>
               {[
