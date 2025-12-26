@@ -89,26 +89,23 @@ const BunnyChat = () => {
       case 'breathe':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
-              ← back
-            </button>
-            <div className="relative h-40 flex items-center justify-center bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl">
+            <div className="relative h-48 flex items-center justify-center bg-gradient-to-r from-purple-900/50 to-purple-800/50 rounded-xl border border-purple-700/30">
               {isBreathing ? (
                 <>
                   <div className={`absolute transition-all duration-[4000ms] ease-in-out rounded-full 
-                    bg-gradient-to-r from-pink-300/40 to-purple-300/40 backdrop-blur-sm
+                    bg-gradient-to-r from-purple-500/40 to-pink-500/40 backdrop-blur-sm
                     ${breathCount % 2 === 0 ? 'scale-100 opacity-50' : 'scale-150 opacity-80'}`}
                     style={{ width: '100px', height: '100px' }}
                   />
-                  <div className="absolute text-gray-700 text-sm font-medium">
+                  <div className="absolute text-purple-200 text-sm font-medium">
                     {breathCount % 2 === 0 ? 'breathe in... 🧘‍♀️' : 'breathe out... 😌'}
                   </div>
                 </>
               ) : (
                 <button
                   onClick={handleBreathing}
-                  className="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 
-                    text-white text-sm font-semibold hover:shadow-lg transition-all"
+                  className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 
+                    text-white text-sm font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all"
                 >
                   start breathing ✨
                 </button>
@@ -120,14 +117,11 @@ const BunnyChat = () => {
       case 'bubbles':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
-              ← back
-            </button>
             <div 
-              className="h-40 relative overflow-hidden bg-gradient-to-b from-purple-50 to-pink-50 rounded-xl cursor-pointer"
+              className="h-48 relative overflow-hidden bg-gradient-to-b from-purple-900/50 to-purple-800/50 rounded-xl cursor-pointer border border-purple-700/30"
               onClick={handleBubbles}
             >
-              <div className="absolute inset-0 flex items-center justify-center text-gray-600 text-sm font-medium">
+              <div className="absolute inset-0 flex items-center justify-center text-purple-300 text-sm font-medium">
                 tap anywhere to pop anxiety bubbles ✨
               </div>
               
@@ -141,7 +135,7 @@ const BunnyChat = () => {
                     top: `${bubble.y}%`,
                     width: `${bubble.size}px`,
                     height: `${bubble.size}px`,
-                    background: 'linear-gradient(45deg, rgba(236, 72, 153, 0.3), rgba(167, 139, 250, 0.3))'
+                    background: 'linear-gradient(45deg, rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.4))'
                   }}
                 />
               ))}
@@ -152,14 +146,11 @@ const BunnyChat = () => {
       case 'aurora':
         return (
           <div className="space-y-3">
-            <button onClick={() => setActiveSection('calm')} className="text-sm text-gray-700 hover:text-pink-600 font-medium">
-              ← back
-            </button>
-            <div className="h-40 relative bg-gray-900 rounded-xl overflow-hidden">
+            <div className="h-48 relative bg-black/50 rounded-xl overflow-hidden border border-purple-700/30">
               <button
                 onClick={() => setAuroraMode(prev => prev === 'wave' ? 'pulse' : 'wave')}
-                className="absolute top-2 right-2 px-3 py-1 rounded-full bg-white/10 text-white/70 
-                  hover:bg-white/20 text-xs z-10"
+                className="absolute top-2 right-2 px-3 py-1 rounded-full bg-purple-700/50 text-purple-200
+                  hover:bg-purple-600/50 text-xs z-10 backdrop-blur-sm"
               >
                 switch mode ✨
               </button>
@@ -170,8 +161,8 @@ const BunnyChat = () => {
                     ? 'animate-auroraWave' 
                     : 'animate-auroraPulse'
                 }`}>
-                  <div className="absolute inset-0 bg-gradient-to-b from-purple-500/20 via-pink-500/10 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-pink-500/20 via-purple-500/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-purple-500/30 via-pink-500/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-pink-500/30 via-purple-500/20 to-transparent" />
                 </div>
               </div>
             </div>
@@ -192,56 +183,100 @@ const BunnyChat = () => {
   return (
     <div className="absolute bottom-[80px] right-4 z-50">
       {isOpen && (
-        <div className="absolute bottom-16 right-0 w-72 bg-white rounded-2xl shadow-xl border border-gray-200">
-          <div className="bg-gradient-to-r from-pink-500 to-purple-500 p-3 rounded-t-2xl flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <img 
-                src="/images/bunny.png" 
-                alt="Bunny"
-                className="w-8 h-8 rounded-full"
-              />
-              <span className="text-white font-semibold text-sm">I am your Bunny 🩷❤️💜</span>
+        <div className="fixed inset-0 z-[100] bg-gradient-to-br from-purple-900 via-gray-900 to-purple-900">
+          {/* Chat Header */}
+          <div className="sticky top-0 z-10 bg-gradient-to-r from-purple-800 to-purple-900 p-4 border-b border-purple-700/50 backdrop-blur-xl">
+            <div className="flex items-center justify-between">
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-purple-300 hover:text-purple-200"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/images/bunny.png" 
+                  alt="Bunny"
+                  className="w-12 h-12 rounded-full border-2 border-purple-400 shadow-lg"
+                />
+                <div>
+                  <p className="text-white font-bold">Bunny AI 🐰</p>
+                  <p className="text-purple-300 text-xs">your comfort companion</p>
+                </div>
+              </div>
+              <div className="w-6" />
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white/90 hover:text-white">
-              <X className="h-5 w-5" />
-            </button>
           </div>
 
-          <div className="p-3 max-h-80 overflow-y-auto bg-white">
+          {/* Chat Messages Area */}
+          <div className="flex-1 overflow-y-auto p-4 pb-24" style={{ height: 'calc(100vh - 140px)' }}>
             {activeSection === 'main' ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
+                {/* Welcome message from Bunny */}
+                <div className="flex justify-start mb-4">
+                  <div className="bg-purple-800/50 backdrop-blur-sm rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] border border-purple-700/50">
+                    <p className="text-purple-100 text-sm leading-relaxed">
+                      hey there! 💜 i'm here to help you feel better. what's on your mind?
+                    </p>
+                  </div>
+                </div>
+
+                {/* Quick action bubbles */}
                 {mainOptions.map((opt) => (
                   <button
                     key={opt.id}
                     onClick={() => setActiveSection(opt.id)}
-                    className="w-full p-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50
-                      hover:from-pink-100 hover:to-purple-100 transition-all flex items-center gap-2"
+                    className="w-full p-4 rounded-2xl bg-gradient-to-r from-purple-800/50 to-purple-900/50 
+                      hover:from-purple-700/60 hover:to-purple-800/60 transition-all flex items-center gap-3
+                      border border-purple-700/50 backdrop-blur-sm"
                   >
-                    <span className="text-xl">{opt.icon}</span>
-                    <span className="text-sm text-gray-800 font-medium">{opt.text}</span>
+                    <span className="text-3xl">{opt.icon}</span>
+                    <span className="text-purple-100 font-medium text-left flex-1">{opt.text}</span>
                   </button>
                 ))}
               </div>
             ) : ['breathe', 'bubbles', 'aurora'].includes(activeSection) ? (
-              renderCalming()
-            ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <button 
                   onClick={() => setActiveSection('main')}
-                  className="text-sm text-gray-700 hover:text-pink-600 font-medium"
+                  className="text-purple-300 hover:text-purple-200 font-medium flex items-center gap-2"
                 >
                   ← back
                 </button>
-                
-                <div className="space-y-2">
+                <div className="bg-purple-800/30 backdrop-blur-xl rounded-2xl p-4 border border-purple-700/50">
+                  {renderCalming()}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <button 
+                  onClick={() => setActiveSection('main')}
+                  className="text-purple-300 hover:text-purple-200 font-medium flex items-center gap-2"
+                >
+                  ← back
+                </button>
+
+                {/* Bunny's response */}
+                <div className="flex justify-start">
+                  <div className="bg-purple-800/50 backdrop-blur-sm rounded-2xl rounded-tl-sm px-4 py-3 max-w-[80%] border border-purple-700/50">
+                    <p className="text-purple-100 text-sm leading-relaxed">
+                      i hear you. let's work through this together 💜
+                    </p>
+                  </div>
+                </div>
+
+                {/* Options as chat bubbles */}
+                <div className="space-y-3">
                   {sections[activeSection]?.options.map((opt, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleSectionOption(opt)}
-                      className="w-full p-3 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50
-                        hover:from-pink-100 hover:to-purple-100 transition-all text-left text-sm text-gray-800 font-medium"
+                      className="w-full p-3 rounded-xl bg-purple-800/40 hover:bg-purple-700/50 
+                        transition-all text-left border border-purple-700/30 backdrop-blur-sm"
                     >
-                      {typeof opt === 'object' ? opt.text : opt}
+                      <span className="text-purple-100 text-sm">
+                        {typeof opt === 'object' ? opt.text : opt}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -249,16 +284,18 @@ const BunnyChat = () => {
             )}
           </div>
 
-          <div className="p-3 border-t border-gray-200 bg-white rounded-b-2xl">
+          {/* Chat Input - Always Visible at Bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-purple-900 via-purple-900/95 to-transparent backdrop-blur-xl border-t border-purple-700/50">
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="type something..."
-                className="flex-1 px-3 py-2 rounded-xl bg-gray-100 focus:bg-gray-50 text-gray-800
-                  focus:ring-2 focus:ring-pink-400 transition-all text-sm placeholder-gray-500"
+                placeholder="type your feelings..."
+                className="flex-1 px-4 py-3 rounded-2xl bg-purple-800/50 text-purple-100 
+                  placeholder-purple-400 focus:bg-purple-800/70 focus:ring-2 focus:ring-purple-500 
+                  transition-all border border-purple-700/50 backdrop-blur-sm"
               />
-              <button className="p-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white 
-                rounded-xl hover:shadow-lg transition-all">
+              <button className="p-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white 
+                rounded-2xl hover:shadow-lg hover:shadow-purple-500/50 transition-all">
                 <Send className="h-5 w-5" />
               </button>
             </div>
@@ -267,19 +304,24 @@ const BunnyChat = () => {
       )}
 
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-lg hover:shadow-xl 
-          transition-all hover:scale-110 ${isBouncing ? 'animate-bounce' : ''}`}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (!isOpen) {
+            setActiveSection('main');
+          }
+        }}
+        className={`bg-gradient-to-br from-purple-500 via-pink-500 to-purple-600 rounded-full p-3 shadow-2xl hover:shadow-purple-500/50 
+          transition-all hover:scale-110 border-2 border-purple-300 ${isBouncing ? 'animate-bounce' : ''}`}
       >
         <div className="relative">
           <img 
             src="/images/bunny.png" 
             alt="Bunny"
-            className="w-12 h-12 rounded-full"
+            className="w-14 h-14 rounded-full"
           />
-          <div className="absolute -right-1 -bottom-1 w-5 h-5 bg-gradient-to-r from-pink-400 to-purple-400 
-            rounded-full flex items-center justify-center animate-pulse">
-            <Sparkles className="h-3 w-3 text-white" />
+          <div className="absolute -right-1 -bottom-1 w-6 h-6 bg-gradient-to-r from-pink-500 to-purple-500 
+            rounded-full flex items-center justify-center animate-pulse shadow-lg border-2 border-white">
+            <Sparkles className="h-4 w-4 text-white" />
           </div>
         </div>
       </button>
@@ -288,7 +330,7 @@ const BunnyChat = () => {
 };
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState('nearby');
+  const [selectedCategory, setSelectedCategory] = useState('social');
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -731,12 +773,27 @@ export default function Home() {
     const touchStartY = useRef(0);
     const touchEndY = useRef(0);
     const [swipeOffset, setSwipeOffset] = useState(0);
+    const scrollPosition = useRef(0);
     
     const getGenderEmoji = (gender) => {
       if (gender === 'boy') return '👨';
       if (gender === 'girl') return '👩';
       return '🎭';
     };
+
+    // Save scroll position before state changes
+    const saveScrollPosition = () => {
+      if (scrollRef.current) {
+        scrollPosition.current = scrollRef.current.scrollTop;
+      }
+    };
+
+    // Restore scroll position after state changes
+    useEffect(() => {
+      if (scrollRef.current && scrollPosition.current > 0) {
+        scrollRef.current.scrollTop = scrollPosition.current;
+      }
+    }, [isConnected]);
 
     const handleTouchStart = (e) => {
       touchStartX.current = e.touches[0].clientX;
@@ -798,13 +855,16 @@ export default function Home() {
         )}
 
         <div className="sticky top-0 z-10 flex items-center justify-between p-3 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-xl border-b border-white/10">
-          <button onClick={() => setShowProfile(false)} className="text-white">
-            <X className="w-5 h-5" />
+          <button 
+            onClick={() => setShowProfile(false)} 
+            className="text-purple-400 hover:text-purple-300 transition-colors bg-purple-500/20 backdrop-blur-sm rounded-full p-2"
+          >
+            <X className="w-6 h-6" />
           </button>
           <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border-2 border-pink-300 shadow-lg shadow-pink-500/50">
             {getGenderEmoji(user.gender)}
           </div>
-          <div className="w-5" />
+          <div className="w-6" />
         </div>
 
         <div 
@@ -986,6 +1046,7 @@ export default function Home() {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  saveScrollPosition();
                   setIsConnected(true);
                 }}
                 className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-105 transition-all active:scale-95"
@@ -999,6 +1060,7 @@ export default function Home() {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  saveScrollPosition();
                   clearBottomNav();
                   setShowChat(true);
                 }}
