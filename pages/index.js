@@ -1349,8 +1349,10 @@ export default function Home() {
 
   const AvatarBuilder = () => {
     const [selectedBubbles, setSelectedBubbles] = useState([]);
-    const [bubbleDescriptions, setBubbleDescriptions] = useState({});
-    const [nearbyTime, setNearbyTime] = useState('');
+    const [bubbleData, setBubbleData] = useState({});
+    const [listeningNow, setListeningNow] = useState('');
+    const [showPopup, setShowPopup] = useState(null);
+    const [popupData, setPopupData] = useState({});
     
     const allBubbles = [
       { id: 'nearby', img: '/images/nearby.jpg', isNearby: true },
@@ -1364,20 +1366,20 @@ export default function Home() {
     const toggleBubble = (id) => {
       if (selectedBubbles.includes(id)) {
         setSelectedBubbles(selectedBubbles.filter(b => b !== id));
-        if (id === 'nearby') {
-          setNearbyTime('');
-        } else {
-          const newDesc = {...bubbleDescriptions};
-          delete newDesc[id];
-          setBubbleDescriptions(newDesc);
-        }
+        const newData = {...bubbleData};
+        delete newData[id];
+        setBubbleData(newData);
       } else if (selectedBubbles.length < 2) {
         setSelectedBubbles([...selectedBubbles, id]);
+        setShowPopup(id);
+        setPopupData({});
       }
     };
 
-    const updateDescription = (id, desc) => {
-      setBubbleDescriptions({...bubbleDescriptions, [id]: desc});
+    const savePopupData = () => {
+      setBubbleData({...bubbleData, [showPopup]: popupData});
+      setShowPopup(null);
+      setPopupData({});
     };
 
     return (
@@ -1401,7 +1403,7 @@ export default function Home() {
         <div className="px-4 pt-3 pb-6">
           <p className="text-purple-400 text-xs font-semibold mb-4 text-center">make today's profile</p>
 
-          {/* Edit Avatar - Snap Emoji */}
+          {/* Edit Avatar */}
           <div className="mb-4">
             <p className="text-purple-300 text-xs font-semibold mb-2">edit avatar</p>
             <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 rounded-2xl p-6 border border-purple-500/20 text-center">
@@ -1409,7 +1411,7 @@ export default function Home() {
                 <img src="/images/snap-emojis/sarah.png" alt="avatar" className="w-full h-full object-contain" />
               </div>
               <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-xl font-semibold text-xs shadow-lg">
-                Edit Snap Emoji
+                Edit Avatar
               </button>
             </div>
           </div>
@@ -1452,55 +1454,30 @@ export default function Home() {
                       </div>
                     )}
                   </button>
-                  
-                  {selectedBubbles.includes(bubble.id) && (
-                    <div className="mt-2 w-32">
-                      {bubble.isNearby ? (
-                        <input
-                          type="time"
-                          value={nearbyTime}
-                          onChange={(e) => setNearbyTime(e.target.value)}
-                          className="w-full px-2 py-1 rounded-lg bg-purple-950/50 text-white text-xs border border-purple-500/30 focus:border-purple-500"
-                        />
-                      ) : (
-                        <input
-                          type="text"
-                          value={bubbleDescriptions[bubble.id] || ''}
-                          onChange={(e) => updateDescription(bubble.id, e.target.value)}
-                          placeholder="description..."
-                          className="w-full px-2 py-1 rounded-lg bg-purple-950/50 text-white placeholder-purple-400 text-xs border border-purple-500/30 focus:border-purple-500"
-                        />
-                      )}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Run Today */}
-          <div className="mb-3 bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-xl">
-                🏃
+          {/* Listening Now - Editable */}
+          <div className="mb-4">
+            <p className="text-purple-300 text-xs font-semibold mb-2">listening now</p>
+            <div className="bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
+                  🎵
+                </div>
+                <div className="flex-1">
+                  <p className="text-white font-semibold text-xs">listening now</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-xs">run today</p>
-                <p className="text-green-400 text-xs">5K morning • central park</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Listening Now */}
-          <div className="mb-4 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
-                🎵
-              </div>
-              <div className="flex-1">
-                <p className="text-white font-semibold text-xs">listening now</p>
-                <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
-              </div>
+              <input
+                type="text"
+                value={listeningNow}
+                onChange={(e) => setListeningNow(e.target.value)}
+                placeholder="indie / bedroom pop • on repeat"
+                className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 text-xs border border-purple-500/30 focus:border-purple-500"
+              />
             </div>
           </div>
 
@@ -1509,6 +1486,108 @@ export default function Home() {
             Save Daily Profile ✨
           </button>
         </div>
+
+        {/* Popup for Bubble Details */}
+        {showPopup && (
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 rounded-2xl p-6 max-w-sm w-full border border-purple-500/30">
+              <p className="text-white font-bold text-lg mb-4 text-center">
+                {showPopup === 'nearby' ? 'Set Nearby Time' : 'Bubble Details'}
+              </p>
+
+              {showPopup === 'nearby' ? (
+                // Nearby: From and To time
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-purple-300 text-xs mb-1">from</p>
+                    <input
+                      type="time"
+                      value={popupData.from || ''}
+                      onChange={(e) => setPopupData({...popupData, from: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white border border-purple-500/30 focus:border-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-purple-300 text-xs mb-1">to</p>
+                    <input
+                      type="time"
+                      value={popupData.to || ''}
+                      onChange={(e) => setPopupData({...popupData, to: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white border border-purple-500/30 focus:border-purple-500"
+                    />
+                  </div>
+                </div>
+              ) : (
+                // Other bubbles: Paid/Not Paid, Time, Description
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-purple-300 text-xs mb-1">type</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => setPopupData({...popupData, paid: false})}
+                        className={`py-2 rounded-xl text-xs font-semibold ${
+                          popupData.paid === false
+                            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white'
+                            : 'bg-purple-950/50 text-purple-300 border border-purple-500/30'
+                        }`}
+                      >
+                        Not Paid
+                      </button>
+                      <button
+                        onClick={() => setPopupData({...popupData, paid: true})}
+                        className={`py-2 rounded-xl text-xs font-semibold ${
+                          popupData.paid === true
+                            ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white'
+                            : 'bg-purple-950/50 text-purple-300 border border-purple-500/30'
+                        }`}
+                      >
+                        Paid
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-purple-300 text-xs mb-1">time</p>
+                    <input
+                      type="time"
+                      value={popupData.time || ''}
+                      onChange={(e) => setPopupData({...popupData, time: e.target.value})}
+                      className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white border border-purple-500/30 focus:border-purple-500"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-purple-300 text-xs mb-1">description</p>
+                    <input
+                      type="text"
+                      value={popupData.description || ''}
+                      onChange={(e) => setPopupData({...popupData, description: e.target.value})}
+                      placeholder="add description..."
+                      className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => {
+                    setShowPopup(null);
+                    setPopupData({});
+                    setSelectedBubbles(selectedBubbles.filter(b => b !== showPopup));
+                  }}
+                  className="flex-1 py-2 rounded-xl bg-gray-700 text-white font-semibold text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={savePopupData}
+                  className="flex-1 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold text-sm"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
