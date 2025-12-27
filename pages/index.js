@@ -1245,13 +1245,7 @@ export default function Home() {
               {/* Available Today Bubbles - ONLY in nearby category */}
               {selectedCategory === 'nearby' && (
                 <div className="grid grid-cols-2 gap-2 mb-3">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Show timeslots view instead of chat
-                    }}
-                    className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
-                  >
+                  <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-7 h-7 rounded-lg overflow-hidden">
                         <img 
@@ -1262,15 +1256,9 @@ export default function Home() {
                       </div>
                       <p className="text-white font-semibold text-xs">2:00 PM</p>
                     </div>
-                  </button>
+                  </div>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Show timeslots view instead of chat
-                    }}
-                    className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
-                  >
+                  <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
                     <div className="flex items-center gap-2 mb-1">
                       <div className="w-7 h-7 rounded-lg overflow-hidden">
                         <img 
@@ -1281,15 +1269,9 @@ export default function Home() {
                       </div>
                       <p className="text-white font-semibold text-xs">5:00 PM</p>
                     </div>
-                  </button>
+                  </div>
                 </div>
               )}
-
-              {/* Daily Profile - Chill vibe, music, etc at bottom */}
-              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-                <p className="text-purple-400 text-xs font-semibold mb-2">today's vibe</p>
-                <p className="text-white text-sm italic">"just vibing, down for anything ✨"</p>
-              </div>
             </>
           )}
 
@@ -1369,7 +1351,6 @@ export default function Home() {
     const [selectedBubbles, setSelectedBubbles] = useState([]);
     const [bubbleDescriptions, setBubbleDescriptions] = useState({});
     const [nearbyTime, setNearbyTime] = useState('');
-    const [dailyVibe, setDailyVibe] = useState('');
     
     const allBubbles = [
       { id: 'nearby', img: '/images/nearby.jpg', isNearby: true },
@@ -1401,7 +1382,7 @@ export default function Home() {
 
     return (
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-purple-950 z-[60] overflow-y-auto">
-        {/* Header with emoji like profile view */}
+        {/* Header with girl emoji */}
         <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20 p-4">
           <div className="flex items-center justify-between">
             <button 
@@ -1410,8 +1391,8 @@ export default function Home() {
             >
               <X className="w-6 h-6" />
             </button>
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border-2 border-pink-300 shadow-lg shadow-pink-500/50">
-              😊
+            <div className="w-12 h-12 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-3xl border-2 border-pink-300 shadow-lg shadow-pink-500/50">
+              👧
             </div>
             <div className="w-10"></div>
           </div>
@@ -1420,66 +1401,107 @@ export default function Home() {
         <div className="px-4 pt-3 pb-6">
           <p className="text-purple-400 text-xs font-semibold mb-4 text-center">make today's profile</p>
 
-          {/* Vertical Bubble Selection */}
-          <div className="mb-4 space-y-3">
-            {allBubbles.map((bubble) => (
-              <div key={bubble.id}>
-                <button
-                  onClick={() => toggleBubble(bubble.id)}
-                  className={`w-full p-3 rounded-xl transition-all flex items-center gap-3 ${
-                    selectedBubbles.includes(bubble.id)
-                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-600/30 border-2 border-pink-500'
-                      : 'bg-purple-950/40 border border-purple-500/20'
-                  }`}
-                >
-                  <img 
-                    src={bubble.img}
-                    alt={bubble.id}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  {selectedBubbles.includes(bubble.id) && (
-                    <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs">✓</span>
-                    </div>
-                  )}
-                </button>
-                
-                {selectedBubbles.includes(bubble.id) && (
-                  <div className="mt-2">
-                    {bubble.isNearby ? (
-                      // Nearby - just select time
-                      <input
-                        type="time"
-                        value={nearbyTime}
-                        onChange={(e) => setNearbyTime(e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white border border-purple-500/30 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all text-sm"
-                      />
-                    ) : (
-                      // Other bubbles - add description
-                      <input
-                        type="text"
-                        value={bubbleDescriptions[bubble.id] || ''}
-                        onChange={(e) => updateDescription(bubble.id, e.target.value)}
-                        placeholder="add description..."
-                        className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all text-sm"
-                      />
-                    )}
-                  </div>
-                )}
+          {/* Edit Avatar - Snap Emoji */}
+          <div className="mb-4">
+            <p className="text-purple-300 text-xs font-semibold mb-2">edit avatar</p>
+            <div className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 rounded-2xl p-6 border border-purple-500/20 text-center">
+              <div className="w-24 h-24 mx-auto mb-3">
+                <img src="/images/snap-emojis/sarah.png" alt="avatar" className="w-full h-full object-contain" />
               </div>
-            ))}
+              <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-xl font-semibold text-xs shadow-lg">
+                Edit Snap Emoji
+              </button>
+            </div>
           </div>
 
-          {/* Daily Vibe */}
+          {/* Edit Photo */}
           <div className="mb-4">
-            <p className="text-purple-400 text-xs font-semibold mb-2">today's vibe</p>
-            <input
-              type="text"
-              value={dailyVibe}
-              onChange={(e) => setDailyVibe(e.target.value)}
-              placeholder="just vibing, down for anything ✨"
-              className="w-full px-4 py-3 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all text-sm italic"
-            />
+            <p className="text-purple-300 text-xs font-semibold mb-2">edit photo</p>
+            <div className="relative h-48 bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 rounded-2xl overflow-hidden border border-purple-500/20">
+              <img src="/images/users/Sarah/1.jpg" alt="profile" className="w-full h-full object-cover" />
+              <button className="absolute bottom-3 right-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl font-semibold text-xs shadow-lg">
+                Change Photo
+              </button>
+            </div>
+          </div>
+
+          {/* Horizontal Bubble Selection */}
+          <div className="mb-4">
+            <p className="text-purple-300 text-xs font-semibold mb-2">choose bubbles (max 2)</p>
+            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-3">
+              {allBubbles.map((bubble) => (
+                <div key={bubble.id} className="flex-shrink-0">
+                  <button
+                    onClick={() => toggleBubble(bubble.id)}
+                    className={`relative w-16 h-16 rounded-full overflow-hidden border-2 transition-all ${
+                      selectedBubbles.includes(bubble.id)
+                        ? 'border-pink-500 scale-110 shadow-lg shadow-pink-500/50'
+                        : 'border-purple-500/30'
+                    }`}
+                  >
+                    <img 
+                      src={bubble.img}
+                      alt={bubble.id}
+                      className="w-full h-full object-cover"
+                    />
+                    {selectedBubbles.includes(bubble.id) && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/50 to-purple-600/50 flex items-center justify-center">
+                        <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                          <span className="text-pink-600 text-sm">✓</span>
+                        </div>
+                      </div>
+                    )}
+                  </button>
+                  
+                  {selectedBubbles.includes(bubble.id) && (
+                    <div className="mt-2 w-32">
+                      {bubble.isNearby ? (
+                        <input
+                          type="time"
+                          value={nearbyTime}
+                          onChange={(e) => setNearbyTime(e.target.value)}
+                          className="w-full px-2 py-1 rounded-lg bg-purple-950/50 text-white text-xs border border-purple-500/30 focus:border-purple-500"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={bubbleDescriptions[bubble.id] || ''}
+                          onChange={(e) => updateDescription(bubble.id, e.target.value)}
+                          placeholder="description..."
+                          className="w-full px-2 py-1 rounded-lg bg-purple-950/50 text-white placeholder-purple-400 text-xs border border-purple-500/30 focus:border-purple-500"
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Run Today */}
+          <div className="mb-3 bg-gradient-to-br from-white/5 via-green-500/10 to-emerald-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-xl">
+                🏃
+              </div>
+              <div className="flex-1">
+                <p className="text-white font-semibold text-xs">run today</p>
+                <p className="text-green-400 text-xs">5K morning • central park</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Listening Now */}
+          <div className="mb-4 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl animate-pulse">
+                🎵
+              </div>
+              <div className="flex-1">
+                <p className="text-white font-semibold text-xs">listening now</p>
+                <p className="text-pink-400 text-xs">indie / bedroom pop • on repeat</p>
+              </div>
+            </div>
           </div>
 
           {/* Save Button */}
