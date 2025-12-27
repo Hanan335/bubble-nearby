@@ -1242,79 +1242,53 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Available Today - At bottom with stats - NO nearby (it's default) */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {/* First activity bubble - always "available today" */}
-                {(() => {
-                  // nearby is NOT in this list - it's default/always on
-                  const activities = [
-                    { category: 'social', img: '/images/coffee.jpg', alt: 'coffee' },
-                    { category: 'rides', img: '/images/car.jpg', alt: 'ride' },
-                    { category: 'study', img: '/images/studying.jpg', alt: 'study' },
-                    { category: 'sports', img: '/images/playing.jpg', alt: 'sports' },
-                    { category: 'events', img: '/images/events.jpg', alt: 'event' }
-                  ];
-                  
-                  const firstActivity = activities.find(a => a.category !== selectedCategory);
-                  
-                  return firstActivity && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg overflow-hidden">
-                          <img 
-                            src={firstActivity.img}
-                            alt={firstActivity.alt}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <p className="text-white font-semibold text-xs">available today</p>
+              {/* Available Today Bubbles - ONLY in nearby category */}
+              {selectedCategory === 'nearby' && (
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Show timeslots view instead of chat
+                    }}
+                    className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-7 h-7 rounded-lg overflow-hidden">
+                        <img 
+                          src="/images/coffee.jpg"
+                          alt="coffee"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                    </button>
-                  );
-                })()}
+                      <p className="text-white font-semibold text-xs">2:00 PM</p>
+                    </div>
+                  </button>
 
-                {/* Second activity bubble - always "activities left" */}
-                {(() => {
-                  const activities = [
-                    { category: 'social', img: '/images/coffee.jpg', alt: 'coffee' },
-                    { category: 'rides', img: '/images/car.jpg', alt: 'ride' },
-                    { category: 'study', img: '/images/studying.jpg', alt: 'study' },
-                    { category: 'sports', img: '/images/playing.jpg', alt: 'sports' },
-                    { category: 'events', img: '/images/events.jpg', alt: 'event' }
-                  ];
-                  
-                  const filtered = activities.filter(a => a.category !== selectedCategory);
-                  const secondActivity = filtered[1];
-                  
-                  return secondActivity && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        saveScrollPosition();
-                        setShowChat(true);
-                      }}
-                      className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-lg overflow-hidden">
-                          <img 
-                            src={secondActivity.img}
-                            alt={secondActivity.alt}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <p className="text-white font-semibold text-xs">activities left</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Show timeslots view instead of chat
+                    }}
+                    className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10 hover:border-purple-500/30 transition-all active:scale-95"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-7 h-7 rounded-lg overflow-hidden">
+                        <img 
+                          src="/images/studying.jpg"
+                          alt="study"
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                    </button>
-                  );
-                })()}
+                      <p className="text-white font-semibold text-xs">5:00 PM</p>
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {/* Daily Profile - Chill vibe, music, etc at bottom */}
+              <div className="mb-3 bg-gradient-to-br from-white/5 via-pink-500/10 to-purple-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
+                <p className="text-purple-400 text-xs font-semibold mb-2">today's vibe</p>
+                <p className="text-white text-sm italic">"just vibing, down for anything ✨"</p>
               </div>
             </>
           )}
@@ -1392,28 +1366,42 @@ export default function Home() {
   };
 
   const AvatarBuilder = () => {
-    const [profilePhoto, setProfilePhoto] = useState(null);
     const [selectedBubbles, setSelectedBubbles] = useState([]);
+    const [bubbleDescriptions, setBubbleDescriptions] = useState({});
+    const [nearbyTime, setNearbyTime] = useState('');
+    const [dailyVibe, setDailyVibe] = useState('');
     
-    // No nearby - it's default and always on
     const allBubbles = [
-      { id: 'coffee', name: 'Coffee', desc: 'grab coffee & chat', img: '/images/coffee.jpg' },
-      { id: 'rides', name: 'Rides', desc: 'share rides to campus', img: '/images/car.jpg' },
-      { id: 'study', name: 'Study', desc: 'library study sessions', img: '/images/studying.jpg' },
-      { id: 'sports', name: 'Sports', desc: 'play sports together', img: '/images/playing.jpg' },
-      { id: 'events', name: 'Events', desc: 'attend events & parties', img: '/images/events.jpg' }
+      { id: 'nearby', img: '/images/nearby.jpg', isNearby: true },
+      { id: 'coffee', img: '/images/coffee.jpg' },
+      { id: 'rides', img: '/images/car.jpg' },
+      { id: 'study', img: '/images/studying.jpg' },
+      { id: 'sports', img: '/images/playing.jpg' },
+      { id: 'events', img: '/images/events.jpg' }
     ];
 
     const toggleBubble = (id) => {
       if (selectedBubbles.includes(id)) {
         setSelectedBubbles(selectedBubbles.filter(b => b !== id));
+        if (id === 'nearby') {
+          setNearbyTime('');
+        } else {
+          const newDesc = {...bubbleDescriptions};
+          delete newDesc[id];
+          setBubbleDescriptions(newDesc);
+        }
       } else if (selectedBubbles.length < 2) {
         setSelectedBubbles([...selectedBubbles, id]);
       }
     };
 
+    const updateDescription = (id, desc) => {
+      setBubbleDescriptions({...bubbleDescriptions, [id]: desc});
+    };
+
     return (
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-purple-950 z-[60] overflow-y-auto">
+        {/* Header with emoji like profile view */}
         <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20 p-4">
           <div className="flex items-center justify-between">
             <button 
@@ -1422,92 +1410,81 @@ export default function Home() {
             >
               <X className="w-6 h-6" />
             </button>
-            <h2 className="text-white font-bold text-lg">Build Your Bubble</h2>
+            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border-2 border-pink-300 shadow-lg shadow-pink-500/50">
+              😊
+            </div>
             <div className="w-10"></div>
           </div>
         </div>
 
         <div className="px-4 pt-3 pb-6">
-          {/* Small Avatar Photo */}
-          <div className="mb-4 text-center">
-            <div className="w-32 h-32 mx-auto mb-3 rounded-full overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10">
-              {profilePhoto ? (
-                <img src={profilePhoto} alt="avatar" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-5xl">📸</span>
-                </div>
-              )}
-            </div>
-            <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-lg">
-              Edit Photo
-            </button>
-          </div>
+          <p className="text-purple-400 text-xs font-semibold mb-4 text-center">make today's profile</p>
 
-          {/* Scrollable Bubble Bar */}
-          <div className="mb-4">
-            <p className="text-purple-400 text-xs font-semibold mb-3">choose your bubbles (max 2)</p>
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-3">
-              {allBubbles.map((bubble) => (
+          {/* Vertical Bubble Selection */}
+          <div className="mb-4 space-y-3">
+            {allBubbles.map((bubble) => (
+              <div key={bubble.id}>
                 <button
-                  key={bubble.id}
                   onClick={() => toggleBubble(bubble.id)}
-                  className={`flex-shrink-0 transition-all ${
-                    selectedBubbles.includes(bubble.id) ? 'scale-110' : ''
+                  className={`w-full p-3 rounded-xl transition-all flex items-center gap-3 ${
+                    selectedBubbles.includes(bubble.id)
+                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-600/30 border-2 border-pink-500'
+                      : 'bg-purple-950/40 border border-purple-500/20'
                   }`}
                 >
-                  <div className={`relative w-20 h-20 rounded-full overflow-hidden border-2 ${
-                    selectedBubbles.includes(bubble.id) 
-                      ? 'border-pink-500 shadow-lg shadow-pink-500/50' 
-                      : 'border-purple-500/30'
-                  }`}>
-                    <img 
-                      src={bubble.img}
-                      alt={bubble.name}
-                      className="w-full h-full object-cover"
-                    />
-                    {selectedBubbles.includes(bubble.id) && (
-                      <div className="absolute inset-0 bg-gradient-to-br from-pink-500/40 to-purple-600/40 flex items-center justify-center">
-                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                          <span className="text-pink-600 text-lg">✓</span>
-                        </div>
-                      </div>
+                  <img 
+                    src={bubble.img}
+                    alt={bubble.id}
+                    className="w-12 h-12 rounded-lg object-cover"
+                  />
+                  {selectedBubbles.includes(bubble.id) && (
+                    <div className="w-6 h-6 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  )}
+                </button>
+                
+                {selectedBubbles.includes(bubble.id) && (
+                  <div className="mt-2">
+                    {bubble.isNearby ? (
+                      // Nearby - just select time
+                      <input
+                        type="time"
+                        value={nearbyTime}
+                        onChange={(e) => setNearbyTime(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white border border-purple-500/30 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all text-sm"
+                      />
+                    ) : (
+                      // Other bubbles - add description
+                      <input
+                        type="text"
+                        value={bubbleDescriptions[bubble.id] || ''}
+                        onChange={(e) => updateDescription(bubble.id, e.target.value)}
+                        placeholder="add description..."
+                        className="w-full px-3 py-2 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 focus:ring-1 focus:ring-purple-500/50 transition-all text-sm"
+                      />
                     )}
                   </div>
-                  <p className="text-white text-xs font-semibold text-center mt-2">{bubble.name}</p>
-                  <p className="text-purple-400 text-xs text-center">{bubble.desc}</p>
-                </button>
-              ))}
-            </div>
+                )}
+              </div>
+            ))}
           </div>
 
-          {/* Preview */}
-          <div className="mb-4 bg-gradient-to-br from-purple-900/60 via-gray-900/60 to-purple-950/60 rounded-2xl p-4 border border-purple-500/30">
-            <p className="text-purple-300 text-xs font-semibold mb-3">preview</p>
-            {selectedBubbles.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2">
-                {selectedBubbles.map((bubbleId, idx) => {
-                  const bubble = allBubbles.find(b => b.id === bubbleId);
-                  return bubble && (
-                    <div key={idx} className="bg-gradient-to-br from-white/5 via-purple-500/10 to-pink-500/10 backdrop-blur-2xl rounded-2xl p-3 border border-white/10">
-                      <div className="flex items-center gap-2">
-                        <img src={bubble.img} alt={bubble.name} className="w-7 h-7 rounded-lg object-cover" />
-                        <p className="text-white font-semibold text-xs">
-                          {idx === 0 ? 'available today' : 'activities left'}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <p className="text-purple-400 text-xs text-center py-4">select bubbles to see preview</p>
-            )}
+          {/* Daily Vibe */}
+          <div className="mb-4">
+            <p className="text-purple-400 text-xs font-semibold mb-2">today's vibe</p>
+            <input
+              type="text"
+              value={dailyVibe}
+              onChange={(e) => setDailyVibe(e.target.value)}
+              placeholder="just vibing, down for anything ✨"
+              className="w-full px-4 py-3 rounded-xl bg-purple-950/50 text-white placeholder-purple-400 border border-purple-500/30 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-all text-sm italic"
+            />
           </div>
 
           {/* Save Button */}
           <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-3 rounded-xl font-bold hover:from-pink-600 hover:to-purple-700 transition-all shadow-lg border border-pink-400/30">
-            Save My Bubble Profile ✨
+            Save Daily Profile ✨
           </button>
         </div>
       </div>
