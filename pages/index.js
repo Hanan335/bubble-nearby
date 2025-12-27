@@ -705,7 +705,7 @@ export default function Home() {
         year: "3rd year",
         major: "Business",
         photos: ["/images/users/Jim/1.jpg", "/images/users/Jim/2.jpg"],
-        mood: "hoping for a casual 5-10 minute walk to unwind 😌",
+        mood: "hoping for a casual 5-10 minute chat to unwind 😌",
         location: "Campus Starbucks",
         price: null,
         status: 'waiting'
@@ -902,7 +902,7 @@ export default function Home() {
     useEffect(() => {
       if (chatMessages.length === 0) {
         setChatMessages([{
-          text: "Hey !!! ",
+          text: "Hey!",
           sender: 'user',
           time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
@@ -1090,7 +1090,7 @@ export default function Home() {
             className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border-2 border-pink-300 shadow-lg shadow-pink-500/50"
             onClick={(e) => e.stopPropagation()}
           >
-            {getGenderEmoji(user.gender)}
+            👧
           </div>
           <div className="w-6" />
         </div>
@@ -1802,7 +1802,7 @@ export default function Home() {
 
               <div className="relative z-10 text-center px-6">
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-3xl mb-3">
-                  Welcome to the Bubble World
+                  bubble world
                 </p>
                 <p className="text-gray-400 text-sm">select a category below</p>
               </div>
@@ -1811,6 +1811,19 @@ export default function Home() {
         </div>
 
         <BunnyChat />
+
+        {/* Avatar Button - Top Left - Smaller with Blink */}
+        <button
+          onClick={() => {
+            clearBottomNav();
+            setShowAvatar(true);
+          }}
+          className="absolute top-4 left-4 z-50 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 rounded-full p-1.5 shadow-2xl hover:shadow-pink-500/50 transition-all hover:scale-110 border-2 border-pink-300 animate-pulse"
+        >
+          <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border border-white shadow-lg">
+            👧
+          </div>
+        </button>
 
         <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
           <div className="p-2 overflow-x-auto scrollbar-hide">
@@ -1822,7 +1835,6 @@ export default function Home() {
                 { id: 'rides', image: '/images/car.jpg'},
                 { id: 'study', image: '/images/studying.jpg'},
                 { id: 'sports', image: '/images/playing.jpg'},
-                { id: 'avatar', isAvatar: true, icon: '✨'},
                 { id: 'wallet', isWallet: true, icon: '💳'},
               ].map((category) => (
                 <button
@@ -1831,22 +1843,19 @@ export default function Home() {
                     if (category.isWallet) {
                       clearBottomNav();
                       setShowWallet(true);
-                    } else if (category.isAvatar) {
-                      clearBottomNav();
-                      setShowAvatar(true);
                     } else {
                       setSelectedCategory(category.id);
                     }
                   }}
                   className={`p-2 rounded-full transition-all transform hover:scale-105 flex-shrink-0 ${
-                    category.isWallet || category.isAvatar
+                    category.isWallet
                       ? 'bg-gray-50 text-gray-600 hover:bg-pink-50'
                       : selectedCategory === category.id
                       ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-lg scale-110'
                       : 'bg-gray-50 text-gray-600 hover:bg-pink-50'
                   }`}
                 >
-                  {category.isWallet || category.isAvatar ? (
+                  {category.isWallet ? (
                     <div className="w-9 h-9 flex items-center justify-center">
                       <span className="text-2xl">{category.icon}</span>
                     </div>
