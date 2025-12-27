@@ -1802,7 +1802,7 @@ export default function Home() {
 
               <div className="relative z-10 text-center px-6">
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-3xl mb-3">
-                  bubble world
+                  Welcome to the Bubble World
                 </p>
                 <p className="text-gray-400 text-sm">select a category below</p>
               </div>
