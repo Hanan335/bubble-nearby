@@ -1773,14 +1773,35 @@ export default function Home() {
           )}
 
           {!selectedCategory && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-white via-purple-50 to-pink-50 z-0">
-              <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+            <div className="fixed inset-0 flex items-center justify-center overflow-hidden z-0">
+              {/* Magical animated background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-pink-900 to-purple-900 animate-pulse"></div>
+              
+              {/* Floating orbs */}
+              <div className="absolute top-10 left-10 w-64 h-64 bg-pink-500/30 rounded-full blur-3xl animate-pulse" style={{animationDuration: '3s'}}></div>
+              <div className="absolute bottom-20 right-10 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{animationDuration: '4s', animationDelay: '1s'}}></div>
+              <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-pink-400/20 rounded-full blur-2xl animate-pulse" style={{animationDuration: '5s', animationDelay: '2s'}}></div>
+              <div className="absolute bottom-1/4 left-1/2 w-56 h-56 bg-purple-400/20 rounded-full blur-3xl animate-pulse" style={{animationDuration: '6s', animationDelay: '0.5s'}}></div>
+              
+              {/* Sparkles */}
+              <div className="absolute inset-0">
+                {[...Array(30)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-1 h-1 bg-white rounded-full shadow-lg shadow-white/50"
+                    style={{
+                      top: `${Math.random() * 100}%`,
+                      left: `${Math.random() * 100}%`,
+                      animation: `twinkle ${2 + Math.random() * 3}s infinite`,
+                      animationDelay: `${Math.random() * 2}s`,
+                      opacity: 0
+                    }}
+                  ></div>
+                ))}
               </div>
+
               <div className="relative z-10 text-center px-6">
-                <p className="text-6xl mb-4 animate-bounce">💜</p>
-                <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 font-bold text-2xl mb-3">
+                <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-3xl mb-3 animate-pulse">
                   welcome to the bubble world
                 </p>
                 <p className="text-purple-500 text-lg font-semibold mb-2">
