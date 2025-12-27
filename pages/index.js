@@ -902,7 +902,7 @@ export default function Home() {
     useEffect(() => {
       if (chatMessages.length === 0) {
         setChatMessages([{
-          text: "Hey! I saw you're listening to indie/bedroom pop. Have you heard 'Good Luck, Babe!' by Chappell Roan? It's giving those vibes! 🎵✨",
+          text: "Hey !!! ",
           sender: 'user',
           time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
