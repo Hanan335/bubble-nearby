@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, DollarSign, Ticket, Heart, Phone, Video, Send, Plus, Sparkles } from 'lucide-react';
 
-const BunnyChat = ({ onOpenChange }) => {
+const BunnyChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('main');
   const [isBouncing, setIsBouncing] = useState(false);
@@ -507,7 +507,6 @@ const BunnyChat = ({ onOpenChange }) => {
       <button
         onClick={() => {
           setIsOpen(!isOpen);
-          onOpenChange?.(!isOpen);
           if (!isOpen) {
             setActiveSection('main');
           }
@@ -546,7 +545,6 @@ export default function Home() {
   const [coffeeInviteSent, setCoffeeInviteSent] = useState(false);
   const [showWallet, setShowWallet] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
-  const [isBunnyOpen, setIsBunnyOpen] = useState(false);
 
   // Helper to clear bottom navigation selection
   const clearBottomNav = () => {
@@ -1775,7 +1773,7 @@ export default function Home() {
           )}
 
           {!selectedCategory && (
-            <div className="fixed inset-0 flex items-center justify-center overflow-hidden z-0">
+            <div className="absolute inset-0 flex items-center justify-center overflow-hidden z-0">
               {/* Static dark background */}
               <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-purple-950"></div>
               
@@ -1812,22 +1810,20 @@ export default function Home() {
           )}
         </div>
 
-        <BunnyChat onOpenChange={setIsBunnyOpen} />
+        <BunnyChat />
 
-        {/* Avatar Button - Top Left - Hidden when Bunny is open */}
-        {!isBunnyOpen && (
-          <button
-            onClick={() => {
-              clearBottomNav();
-              setShowAvatar(true);
-            }}
-            className="absolute top-4 left-4 z-50 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 rounded-full p-1.5 shadow-2xl hover:shadow-pink-500/50 transition-all hover:scale-110 border-2 border-pink-300 animate-pulse"
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border border-white shadow-lg">
-              👧
-            </div>
-          </button>
-        )}
+        {/* Avatar Button - Top Left - Always Visible */}
+        <button
+          onClick={() => {
+            clearBottomNav();
+            setShowAvatar(true);
+          }}
+          className="absolute top-4 left-4 z-50 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 rounded-full p-1.5 shadow-2xl hover:shadow-pink-500/50 transition-all hover:scale-110 border-2 border-pink-300 animate-pulse"
+        >
+          <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border border-white shadow-lg">
+            👧
+          </div>
+        </button>
 
         <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
           <div className="p-2 overflow-x-auto scrollbar-hide">
