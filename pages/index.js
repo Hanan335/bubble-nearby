@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, DollarSign, Ticket, Heart, Phone, Video, Send, Plus, Sparkles } from 'lucide-react';
 
-const BunnyChat = () => {
+const BunnyChat = ({ onOpenChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('main');
   const [isBouncing, setIsBouncing] = useState(false);
@@ -388,7 +388,13 @@ const BunnyChat = () => {
           {/* Chat Header - Profile View Style */}
           <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20">
             <div className="flex items-center justify-between p-4">
-              <div className="flex items-right gap-3">
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-purple-400 hover:text-purple-300 bg-purple-500/10 backdrop-blur-sm rounded-full p-2"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="flex items-center gap-3">
                 <img 
                   src="/images/bunny.png" 
                   alt="Bunny"
@@ -399,12 +405,7 @@ const BunnyChat = () => {
                   <p className="text-purple-400 text-xs">comfort companion 💜</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-purple-400 hover:text-purple-300 bg-purple-500/10 backdrop-blur-sm rounded-full p-2"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="w-9" />
             </div>
           </div>
 
@@ -506,6 +507,7 @@ const BunnyChat = () => {
       <button
         onClick={() => {
           setIsOpen(!isOpen);
+          onOpenChange?.(!isOpen);
           if (!isOpen) {
             setActiveSection('main');
           }
@@ -544,6 +546,7 @@ export default function Home() {
   const [coffeeInviteSent, setCoffeeInviteSent] = useState(false);
   const [showWallet, setShowWallet] = useState(false);
   const [showAvatar, setShowAvatar] = useState(false);
+  const [isBunnyOpen, setIsBunnyOpen] = useState(false);
 
   // Helper to clear bottom navigation selection
   const clearBottomNav = () => {
@@ -560,7 +563,7 @@ export default function Home() {
         year: null,
         major: null,
         occupation: "Software Engineer",
-        photos: ["/images/users/john/1.jpg", "/images/users/john/2.jpg"],
+        photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
         location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
@@ -704,7 +707,7 @@ export default function Home() {
         year: "3rd year",
         major: "Business",
         photos: ["/images/users/Jim/1.jpg", "/images/users/Jim/2.jpg"],
-        mood: "hoping for a casual 5-10 minute chat to unwind 😌",
+        mood: "hoping for a casual 5-10 minute coffee chat to unwind 😌",
         location: "Campus Starbucks",
         price: null,
         status: 'waiting'
@@ -901,7 +904,7 @@ export default function Home() {
     useEffect(() => {
       if (chatMessages.length === 0) {
         setChatMessages([{
-          text: "Hey!",
+          text: "Hey! I saw you're listening to indie/bedroom pop. Have you heard 'Good Luck, Babe!' by Chappell Roan? It's giving those vibes! 🎵✨",
           sender: 'user',
           time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
@@ -1809,20 +1812,22 @@ export default function Home() {
           )}
         </div>
 
-        <BunnyChat />
+        <BunnyChat onOpenChange={setIsBunnyOpen} />
 
-        {/* Avatar Button - Top Left - Smaller with Blink */}
-        <button
-          onClick={() => {
-            clearBottomNav();
-            setShowAvatar(true);
-          }}
-          className="absolute top-4 left-4 z-50 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 rounded-full p-1.5 shadow-2xl hover:shadow-pink-500/50 transition-all hover:scale-110 border-2 border-pink-300 animate-pulse"
-        >
-          <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border border-white shadow-lg">
-            👧
-          </div>
-        </button>
+        {/* Avatar Button - Top Left - Hidden when Bunny is open */}
+        {!isBunnyOpen && (
+          <button
+            onClick={() => {
+              clearBottomNav();
+              setShowAvatar(true);
+            }}
+            className="absolute top-4 left-4 z-50 bg-gradient-to-br from-pink-500 via-purple-500 to-pink-600 rounded-full p-1.5 shadow-2xl hover:shadow-pink-500/50 transition-all hover:scale-110 border-2 border-pink-300 animate-pulse"
+          >
+            <div className="w-10 h-10 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full flex items-center justify-center text-2xl border border-white shadow-lg">
+              👧
+            </div>
+          </button>
+        )}
 
         <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-lg z-40">
           <div className="p-2 overflow-x-auto scrollbar-hide">
