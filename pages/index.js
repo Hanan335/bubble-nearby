@@ -561,7 +561,7 @@ export default function Home() {
         year: null,
         major: null,
         occupation: "Software Engineer",
-        photos: ["/images/users/John/1.jpg", "/images/users/John/2.jpg"],
+        photos: ["/images/users/john/1.jpg", "/images/users/john/2.jpg"],
         location: "JFK Airport - Terminal 4",
         status: 'waiting',
         isNearby: true
@@ -705,7 +705,7 @@ export default function Home() {
         year: "3rd year",
         major: "Business",
         photos: ["/images/users/Jim/1.jpg", "/images/users/Jim/2.jpg"],
-        mood: "hoping for a casual 5-10 minute coffee chat to unwind 😌",
+        mood: "hoping for a casual 5-10 minute walk outside library to unwind 😌",
         location: "Campus Starbucks",
         price: null,
         status: 'waiting'
