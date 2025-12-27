@@ -388,12 +388,6 @@ const BunnyChat = () => {
           {/* Chat Header - Profile View Style */}
           <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20">
             <div className="flex items-center justify-between p-4">
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-purple-400 hover:text-purple-300 bg-purple-500/10 backdrop-blur-sm rounded-full p-2"
-              >
-                <X className="w-5 h-5" />
-              </button>
               <div className="flex items-center gap-3">
                 <img 
                   src="/images/bunny.png" 
@@ -405,7 +399,12 @@ const BunnyChat = () => {
                   <p className="text-purple-400 text-xs">comfort companion 💜</p>
                 </div>
               </div>
-              <div className="w-9" />
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-purple-400 hover:text-purple-300 bg-purple-500/10 backdrop-blur-sm rounded-full p-2"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
@@ -705,7 +704,7 @@ export default function Home() {
         year: "3rd year",
         major: "Business",
         photos: ["/images/users/Jim/1.jpg", "/images/users/Jim/2.jpg"],
-        mood: "hoping for a casual 5-10 minute  chat to unwind 😌",
+        mood: "hoping for a casual 5-10 minute chat to unwind 😌",
         location: "Campus Starbucks",
         price: null,
         status: 'waiting'
@@ -902,7 +901,7 @@ export default function Home() {
     useEffect(() => {
       if (chatMessages.length === 0) {
         setChatMessages([{
-          text: "Hey! ",
+          text: "Hey!",
           sender: 'user',
           time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
@@ -1802,7 +1801,7 @@ export default function Home() {
 
               <div className="relative z-10 text-center px-6">
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 font-bold text-3xl mb-3">
-                  Welcome to the Bubble World
+                  bubble world
                 </p>
                 <p className="text-gray-400 text-sm">select a category below</p>
               </div>
