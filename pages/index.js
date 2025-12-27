@@ -388,7 +388,7 @@ const BunnyChat = () => {
           {/* Chat Header - Profile View Style */}
           <div className="sticky top-0 z-10 bg-gradient-to-b from-black/95 via-black/90 to-transparent backdrop-blur-xl border-b border-purple-500/20">
             <div className="flex items-center justify-between p-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-right gap-3">
                 <img 
                   src="/images/bunny.png" 
                   alt="Bunny"
