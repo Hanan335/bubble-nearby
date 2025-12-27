@@ -531,7 +531,7 @@ const BunnyChat = () => {
 };
 
 export default function Home() {
-  const [selectedCategory, setSelectedCategory] = useState('nearby');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
@@ -705,7 +705,7 @@ export default function Home() {
         year: "3rd year",
         major: "Business",
         photos: ["/images/users/Jim/1.jpg", "/images/users/Jim/2.jpg"],
-        mood: "hoping for a casual 5-10 minute chat to unwind 😌",
+        mood: "hoping for a casual 5-10 minute  chat to unwind 😌",
         location: "Campus Starbucks",
         price: null,
         status: 'waiting'
@@ -902,7 +902,7 @@ export default function Home() {
     useEffect(() => {
       if (chatMessages.length === 0) {
         setChatMessages([{
-          text: "Hey!",
+          text: "Hey! ",
           sender: 'user',
           time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }]);
